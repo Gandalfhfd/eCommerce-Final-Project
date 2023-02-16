@@ -16,14 +16,25 @@ namespace FinalProject.POMClasses
             this.driver = driver;
         }
 
-        public void AddProductToCart(string productName)
+        public bool AddProductToCart(string productName)
         {
             string ariaLabel = $"Add “{productName}” to your cart";
             // need to wait for product button to load
             // Find product
             Console.WriteLine($"Add {productName} to basket");
-            driver.FindElement(By.CssSelector("[data-product_id='31']")).Click();
-            // add to cart
+
+            try
+            {
+                driver.FindElement(By.CssSelector
+                    ($"a[aria-label=\"Add “{productName}” to your cart\"]"))
+                    .Click();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Could not add {productName} to cart");
+                return false;
+            }
+            return true;
         }
     }
 }

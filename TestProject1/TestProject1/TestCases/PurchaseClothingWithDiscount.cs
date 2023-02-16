@@ -6,7 +6,7 @@ namespace FinalProject.TestCases
     internal class PurchaseClothingWithDiscount : Utils.BaseTest
     {
         [Test]
-        public void Lorem()
+        public void TestCase1()
         {
             MyHelpers help = new MyHelpers(driver);
 
@@ -23,6 +23,33 @@ namespace FinalProject.TestCases
             ShopPOM shop = new ShopPOM(driver);
             shop.AddProductToCart("Belt");
 
+            siteWide.NavigateUsingNavLink("Cart");
+
+            CartPOM cart = new CartPOM(driver);
+            string coupon = help.LoadParameterFromRunsettings("coupon");
+            cart.ApplyCoupon(coupon);
+
+            decimal discount = cart.GetCouponDiscount();
+
+            // Get price subtotal
+            decimal subtotal = cart.GetSubtotal();
+
+            // Find % discount
+            decimal discountPercent = discount / subtotal;
+
+            // Capture desired % discount
+            decimal desiredDiscountPercent = Convert.ToDecimal(
+                help.LoadParameterFromRunsettings("discountPercentage")
+                );
+
+            // Compare actual discount % to desired.
+            if (discountPercent != desiredDiscountPercent)
+            {
+                Console.WriteLine($"Discount percentage is not " +
+                    $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}");
+            }
+
+            string shipping = cart.GetShipping();
         }
     }
 }

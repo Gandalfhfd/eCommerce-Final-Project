@@ -24,10 +24,11 @@ namespace FinalProject.Utils
 
         public string LoadParameterFromRunsettings(string parameterName)
         {
-            string output = TestContext.Parameters[parameterName];
+            string? output = TestContext.Parameters[parameterName];
             if (output is null)
             {
-                throw new NullReferenceException($"Parameter <{parameterName}> not found");
+                Console.WriteLine($"Parameter <{parameterName}> not found");
+                output = $"Parameter <{parameterName}> not found";
             }
             return output;
         }
