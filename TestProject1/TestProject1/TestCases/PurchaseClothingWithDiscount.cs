@@ -1,4 +1,5 @@
 ﻿using FinalProject.POMClasses;
+using FinalProject.Utils;
 
 namespace FinalProject.TestCases
 {
@@ -7,9 +8,11 @@ namespace FinalProject.TestCases
         [Test]
         public void Lorem()
         {
+            MyHelpers help = new MyHelpers(driver);
+
             // Load in username and password from external file
-            string username = TestContext.Parameters["username"];
-            string password = TestContext.Parameters["password"];
+            string username = help.LoadParameterFromRunsettings("username");
+            string password = help.LoadParameterFromRunsettings("password");
 
             LoginPagePOM login = new LoginPagePOM(driver);
             login.Login(username, password);

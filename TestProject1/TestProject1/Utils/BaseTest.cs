@@ -8,15 +8,16 @@ namespace FinalProject.Utils
     {
         // May be a good idea to try catch grabbing parameters from testcontext
         protected IWebDriver driver;
-        protected string? baseUrl;
-        protected string? browser;
+        protected string baseUrl;
+        protected string browser;
 
         [SetUp]
         public void SetUp()
         {
-            browser = TestContext.Parameters["browser"];
-            baseUrl = TestContext.Parameters["baseUrl"];
-            //driver = TestContext.Parameters
+            MyHelpers help = new MyHelpers(driver);
+
+            browser = help.LoadParameterFromRunsettings("browser");
+            baseUrl = help.LoadParameterFromRunsettings("baseUrl");
 
             Console.WriteLine($"Read in browser var from commandline: {browser}");
             browser = browser.ToLower().Trim();

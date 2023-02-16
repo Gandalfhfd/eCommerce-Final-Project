@@ -21,5 +21,15 @@ namespace FinalProject.Utils
             textField.Clear();
             textField.SendKeys(text);
         }
+
+        public string LoadParameterFromRunsettings(string parameterName)
+        {
+            string output = TestContext.Parameters[parameterName];
+            if (output is null)
+            {
+                throw new NullReferenceException($"Parameter <{parameterName}> not found");
+            }
+            return output;
+        }
     }
 }
