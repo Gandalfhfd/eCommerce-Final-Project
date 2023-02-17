@@ -37,6 +37,11 @@ namespace FinalProject.POMClasses
         {
             string discountAmount = "";
 
+            // Wait for discount to be calculated
+            MyHelpers help = new MyHelpers(driver);
+            help.WaitForElement(By.CssSelector("td[data-title*='Coupon:'] > " +
+                        "span.woocommerce-Price-amount"), 2);
+
             // Find discount amount in format <£a.b>.
             discountAmount = driver.FindElement(
                 By.CssSelector("td[data-title*='Coupon:'] > " +
@@ -105,9 +110,12 @@ namespace FinalProject.POMClasses
 
             Console.WriteLine("Attempt to remove all items from cart");
 
-            help.WaitForScroll(5);
+            /* Bit of a hack which checks that the page has fully loaded by
+             * checking that it has scrolled. Only really makes sense if a
+             * coupon has just been added. */
+            help.WaitForScroll(3);
 
-            // Do until try catch fails
+            // Remove every item that you can.
             for (int i = 0; i < 100; i++)
             {
                 try
@@ -117,7 +125,6 @@ namespace FinalProject.POMClasses
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Could not remove item from cart");
                     break;
                 }
             }

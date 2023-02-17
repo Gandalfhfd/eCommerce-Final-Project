@@ -48,5 +48,12 @@ namespace FinalProject.POMClasses
             Console.WriteLine("Submit login details");
             driver.FindElement(By.CssSelector("button.woocommerce-form-login__submit")).Click();
         }
+
+        public void Logout()
+        {
+            SiteWidePOM site = new SiteWidePOM(driver);
+            site.NavigateUsingNavLink("My account");
+            driver.FindElement(By.LinkText("Logout")).Click();
+        }
     }
 }

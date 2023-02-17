@@ -21,7 +21,7 @@ namespace FinalProject.TestCases
             siteWide.NavigateUsingNavLink("Shop");
 
             ShopPOM shop = new ShopPOM(driver);
-            shop.AddProductToCart("Belt");
+            shop.AddProductToCart("Sunglasses");
 
             siteWide.NavigateUsingNavLink("Cart");
 
@@ -56,12 +56,17 @@ namespace FinalProject.TestCases
             // Get total as displayed on webpage.
             decimal total = cart.GetTotal();
 
-              Console.WriteLine($"Total is {total}. It should be {theoreticalTotal}");
+            if (total != theoreticalTotal)
+            {
+                Console.WriteLine($"Total is £{total}. It should be £{theoreticalTotal}");
+            }
 
             Assert.That(theoreticalTotal, Is.EqualTo(total),
                 "Total calculated after coupon & shipping is not correct");
 
             cart.RemoveItemFromCart();
+
+            login.Logout();
         }
     }
 }
