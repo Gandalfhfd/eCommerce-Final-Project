@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FinalProject.Utils;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -18,15 +19,13 @@ namespace FinalProject.POMClasses
 
         public bool AddProductToCart(string productName)
         {
-            string ariaLabel = $"Add “{productName}” to your cart";
-            // need to wait for product button to load
-            // Find product
-            Console.WriteLine($"Add {productName} to basket");
+            string productSelectorString = $"Add “{productName}” to your cart";
+            Console.WriteLine(productSelectorString);
 
             try
             {
                 driver.FindElement(By.CssSelector
-                    ($"a[aria-label=\"Add “{productName}” to your cart\"]"))
+                    ($"a[aria-label='{productSelectorString}']"))
                     .Click();
             }
             catch (Exception)
@@ -34,6 +33,11 @@ namespace FinalProject.POMClasses
                 Console.WriteLine($"Could not add {productName} to cart");
                 return false;
             }
+
+            // Wait for product to be added to basket before moving on.
+            MyHelpers help = new MyHelpers(driver);
+            help.WaitForElement(By.CssSelector("a.added_to_cart"), 2);
+
             return true;
         }
     }

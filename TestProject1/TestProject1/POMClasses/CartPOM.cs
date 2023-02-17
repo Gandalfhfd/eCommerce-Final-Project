@@ -3,6 +3,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V107.Input;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,19 +66,61 @@ namespace FinalProject.POMClasses
             return Convert.ToDecimal(subtotal);
         }
 
-        public string GetShipping()
+        public decimal GetShipping()
         {
             string shipping = "";
 
             // Find shipping.
-            // Need to remove "Flat rate: £". 
             shipping = driver.FindElement(
                 By.CssSelector("td[data-title='Shipping'] > * > *"))
                 .Text;
-            Console.WriteLine($"Shipping = {shipping}");
 
-            return shipping;
-            //return Convert.ToDecimal(shipping);
+            Console.WriteLine($"Shipping = {shipping.Substring(11)}");
+
+            // Grab the number from the shipping string
+            shipping = shipping.Substring(12);
+
+            return Convert.ToDecimal(shipping);
+        }
+
+        public decimal GetTotal()
+        {
+            string total = "";
+
+            // Find total
+            total = driver.FindElement(
+                By.CssSelector("td[data-title='Total'] > *"))
+                .Text;
+
+            Console.WriteLine($"Total = {total}");
+
+            // Remove currency symbol from total by removing first char.
+            total = total.Substring(1);
+            return Convert.ToDecimal(total);
+        }
+
+        public void RemoveItemFromCart()
+        {
+            MyHelpers help = new MyHelpers(driver);
+
+            Console.WriteLine("Attempt to remove all items from cart");
+
+            help.WaitForScroll(5);
+
+            // Do until try catch fails
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    driver.FindElement(By.CssSelector("td.product-remove > *")).Click();
+                    Console.WriteLine($"Removed {i + 1} item from cart");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Could not remove item from cart");
+                    break;
+                }
+            }
         }
     }
 }

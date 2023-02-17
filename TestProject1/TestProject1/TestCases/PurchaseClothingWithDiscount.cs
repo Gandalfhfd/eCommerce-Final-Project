@@ -10,7 +10,7 @@ namespace FinalProject.TestCases
         {
             MyHelpers help = new MyHelpers(driver);
 
-            // Load in username and password from external file
+            // Load in username and password from external file.
             string username = help.LoadParameterFromRunsettings("username");
             string password = help.LoadParameterFromRunsettings("password");
 
@@ -31,13 +31,13 @@ namespace FinalProject.TestCases
 
             decimal discount = cart.GetCouponDiscount();
 
-            // Get price subtotal
+            // Get price subtotal.
             decimal subtotal = cart.GetSubtotal();
 
-            // Find % discount
+            // Find % discount.
             decimal discountPercent = discount / subtotal;
 
-            // Capture desired % discount
+            // Capture desired % discount.
             decimal desiredDiscountPercent = Convert.ToDecimal(
                 help.LoadParameterFromRunsettings("discountPercentage")
                 );
@@ -46,10 +46,22 @@ namespace FinalProject.TestCases
             if (discountPercent != desiredDiscountPercent)
             {
                 Console.WriteLine($"Discount percentage is not " +
-                    $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}");
+                    $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
             }
 
-            string shipping = cart.GetShipping();
+            decimal shipping = cart.GetShipping();
+
+            // Calculate total based on previously captured values.
+            decimal theoreticalTotal = subtotal + shipping - discount;
+            // Get total as displayed on webpage.
+            decimal total = cart.GetTotal();
+
+              Console.WriteLine($"Total is {total}. It should be {theoreticalTotal}");
+
+            Assert.That(theoreticalTotal, Is.EqualTo(total),
+                "Total calculated after coupon & shipping is not correct");
+
+            cart.RemoveItemFromCart();
         }
     }
 }
