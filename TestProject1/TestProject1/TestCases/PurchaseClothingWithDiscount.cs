@@ -34,16 +34,19 @@ namespace FinalProject.TestCases
             // Get price subtotal.
             decimal subtotal = cart.GetSubtotal();
 
-            // Find % discount.
             decimal discountPercent = discount / subtotal;
 
-            // Capture desired % discount.
             decimal desiredDiscountPercent = Convert.ToDecimal(
                 help.LoadParameterFromRunsettings("discountPercentage")
                 );
 
-            // Compare actual discount % to desired.
-            if (discountPercent != desiredDiscountPercent)
+            // Find absolute desired discount. Must be rounded to 2 d.p.
+            decimal desiredDiscount = desiredDiscountPercent * subtotal;
+            // Round to 2 d.p. since this is a price.
+            desiredDiscount = Math.Round(desiredDiscountPercent, 2);
+
+            // Compare actual discount to desired discount.
+            if (discount != desiredDiscount)
             {
                 Console.WriteLine($"Discount percentage is not " +
                     $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
