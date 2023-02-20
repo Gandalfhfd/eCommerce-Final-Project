@@ -108,19 +108,26 @@ namespace FinalProject.POMClasses
             // Could simply reduce quantity to 0 on all of them, then
             // Update cart. Would be quicker and less prone to breakage.
             // Need answer on why Try Catch isn't working, regardless.
-
-            MyHelpers help = new MyHelpers(driver);
+                        MyHelpers help = new MyHelpers(driver);
 
             Console.WriteLine("Attempt to remove all items from cart");
 
             /* Bit of a hack which checks that the page has fully loaded by
              * checking that it has scrolled. Only really makes sense if a
              * coupon has just been added. */
+
+            // ATTENTION TO STEVE
+            // The below for loop block is the piece of bad code I was talking
+            // about. It's still throwing an exception. Not sure what I want to
+            // put into the catch.
+
+
             help.WaitForScroll(3);
 
             // Remove every item that you can.
             // Currently only removes 1 item.
             // Just does not work.
+
             for (int i = 0; i < 100; i++)
             {
                 if (help.IsElementPresent(By.CssSelector("p.cart-empty")))
@@ -139,7 +146,7 @@ namespace FinalProject.POMClasses
                     }
                     catch (NoSuchElementException)
                     {
-                        //return;
+                        return;
                         //throw new NoSuchElementException("blah");
                     }
                 }
