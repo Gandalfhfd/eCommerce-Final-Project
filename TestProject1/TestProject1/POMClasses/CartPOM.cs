@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace FinalProject.POMClasses
 {
@@ -105,52 +107,33 @@ namespace FinalProject.POMClasses
 
         public void RemoveItemFromCart()
         {
-            // Could simply reduce quantity to 0 on all of them, then
-            // Update cart. Would be quicker and less prone to breakage.
-            // Need answer on why Try Catch isn't working, regardless.
-                        MyHelpers help = new MyHelpers(driver);
+            driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
+            MyHelpers help = new MyHelpers(driver);
 
             Console.WriteLine("Attempt to remove all items from cart");
 
-            /* Bit of a hack which checks that the page has fully loaded by
-             * checking that it has scrolled. Only really makes sense if a
-             * coupon has just been added. */
+            // Check if we can find any of the quantitites
+            bool elementPresent;
+            elementPresent = help.IsElementPresent(
+                By.CssSelector("input[type='number']"));
 
-            // ATTENTION TO STEVE
-            // The below for loop block is the piece of bad code I was talking
-            // about. It's still throwing an exception. Not sure what I want to
-            // put into the catch.
-
-
-            help.WaitForScroll(3);
-
-            // Remove every item that you can.
-            // Currently only removes 1 item.
-            // Just does not work.
-
-            for (int i = 0; i < 100; i++)
+            if (elementPresent == false)
             {
-                if (help.IsElementPresent(By.CssSelector("p.cart-empty")))
-                {
-                    /* An element declaring the cart is empty has apeared, so
-                     quit the function. */
-                    return;
-                }
-                else
-                {
-                    // The cart may not be empty, so keep trying to empty the cart.
-                    try
-                    {
-                        driver.FindElement(By.LinkText("×")).Click();
-                        Console.WriteLine($"Removed {i + 1} item from cart");
-                    }
-                    catch (NoSuchElementException)
-                    {
-                        return;
-                        //throw new NoSuchElementException("blah");
-                    }
-                }
+                Console.WriteLine("No items in cart");
+                return;
             }
+
+            // Find a list of all of the quantities to loop through later.
+            IReadOnlyList<IWebElement> quantities = driver.FindElements
+                (By.CssSelector("input[type='number']"));
+
+            foreach (IWebElement element in quantities)
+            {
+                help.PutStringInInput(element, "0");
+            }
+
+            driver.FindElement(By.CssSelector("button[name='update_cart']"))
+                .Click();
         }
 
         public void GoToCheckout()
