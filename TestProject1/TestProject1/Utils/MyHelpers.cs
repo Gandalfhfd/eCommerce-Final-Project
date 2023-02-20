@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V107.Debugger;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,14 @@ namespace FinalProject.Utils
         public void PutStringInInput(By locator, string text)
         {
             IWebElement textField = driver.FindElement(locator);
+            textField.Click();
+            textField.Clear();
+            textField.SendKeys(text);
+        }
+
+        public void PutStringInInput(IWebElement textField, string text)
+        // Overload
+        {
             textField.Click();
             textField.Clear();
             textField.SendKeys(text);
@@ -50,8 +59,8 @@ namespace FinalProject.Utils
         }
 
         // Have some way of waiting for several poll times.
-        public IWebElement WaitForStaleElement(By locator,
-            int timeToWaitInSeconds, int pollingTimeInMilliseconds)
+        public IWebElement? WaitForStaleElement(By locator,
+            int timeToWaitInMilliseconds, int pollingTimeInMilliseconds)
         {
             Console.WriteLine($"Polling time = {pollingTimeInMilliseconds}ms");
 
@@ -59,27 +68,51 @@ namespace FinalProject.Utils
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            try
-            {
-                // Initially (presumably) true, we found it earlier - but it may go stale. If it does this will throw.
-                bool elementIsThere = element.Enabled;
-                Thread.Sleep(pollingTimeInMilliseconds);
 
-                //To get here the poll must have expired AND element.Enabled has not caused a StaleElementException.
-                // Yet, by not grabbing a new element, we will get a stale
-                // element exception. So grab a new element and return it.
-                return driver.FindElement(locator);
-            }
-            catch (StaleElementReferenceException)
+            bool elementIsThere = true;
+
+            // If we've waited longer than we want to, end the loop.
+            while (stopWatch.ElapsedMilliseconds < timeToWaitInMilliseconds)
             {
-                Console.WriteLine("Element not stable - retry wait");
-                return element;
+                try
+                {
+                    // Refresh the element.
+                    element = driver.FindElement(locator);
+
+                    // Check if element has gone stale.
+                    // Exception will be thrown if it has, which will restart
+                    // the loop.
+
+                    elementIsThere = element.Enabled;
+
+                    // If the element isn't stale, wait before checking it
+                    // again. The element may be unstable and go stale before
+                    // we pass it back.
+                    Thread.Sleep(pollingTimeInMilliseconds);
+
+                    // Check if element has gone stale.
+                    elementIsThere = element.Enabled;
+
+                    // Getting this far means the element exists and is stable,
+                    // so return it.
+                    return element;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    Console.WriteLine("Element not stable - retry wait");
+                    // Wait for the polling time to expire, then check again.
+                    Thread.Sleep(pollingTimeInMilliseconds);
+                }
+                finally
+                {
+                    Console.WriteLine("Stopwatch finished at: "
+                        + stopWatch.ElapsedMilliseconds.ToString() + "ms");
+
+                    stopWatch.Stop();
+                }
             }
-            finally
-            {
-                Console.WriteLine("Stopwatch finished at: " + stopWatch.ElapsedMilliseconds.ToString());
-                stopWatch.Stop();
-            }
+            
+            return null;
         }
 
         public void WaitForScroll(int timeToWaitInSeconds,
