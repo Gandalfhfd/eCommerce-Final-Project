@@ -21,7 +21,7 @@ namespace FinalProject.TestCases
             siteWide.NavigateUsingNavLink("Shop");
 
             ShopPOM shop = new ShopPOM(driver);
-            shop.AddProductToCart("Sunglasses");
+            shop.AddProductToCart("Belt");
 
             siteWide.NavigateUsingNavLink("Cart");
 
@@ -43,7 +43,7 @@ namespace FinalProject.TestCases
             // Find absolute desired discount. Must be rounded to 2 d.p.
             decimal desiredDiscount = desiredDiscountPercent * subtotal;
             // Round to 2 d.p. since this is a price.
-            desiredDiscount = Math.Round(desiredDiscountPercent, 2);
+            desiredDiscount = Math.Round(desiredDiscount, 2);
 
             // Compare actual discount to desired discount.
             if (discount != desiredDiscount)
@@ -66,8 +66,6 @@ namespace FinalProject.TestCases
 
             Assert.That(theoreticalTotal, Is.EqualTo(total),
                 "Total calculated after coupon & shipping is not correct");
-
-            cart.RemoveItemFromCart();
 
             login.Logout();
         }

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using FinalProject.POMClasses;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 
@@ -34,8 +35,23 @@ namespace FinalProject.Utils
                     break;
             }
 
-            Console.WriteLine(baseUrl);
-            driver.Url = baseUrl;
+            // Load in username and password from external file.
+            string username = help.LoadParameterFromRunsettings("username");
+            string password = help.LoadParameterFromRunsettings("password");
+
+            // Log in so that we can view the cart.
+            LoginPagePOM login = new LoginPagePOM(driver);
+            login.Login(username, password);
+
+            // Prepare the test by removing all items from the cart
+            CartPOM cart = new CartPOM(driver);
+            cart.RemoveItemsFromCart();
+
+            login.Logout();
+
+            //Console.WriteLine(baseUrl);
+            //driver.Url = baseUrl;
+
             Console.WriteLine("Test start");
         }
 
