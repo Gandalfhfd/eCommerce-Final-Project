@@ -31,13 +31,12 @@ namespace FinalProject.POMClasses
 
         public void Login(string username, string password)
         {
-            // Assume we're on the my-account page.
-
-            Console.WriteLine("Log in");
             NavigateToLoginPage();
 
             // Let us use the helper library.
             MyHelpers help = new MyHelpers(driver);
+
+            Console.WriteLine("Log in");
 
             Console.WriteLine("Input username");
             help.PutStringInInput(By.Id("username"), username);
@@ -53,6 +52,7 @@ namespace FinalProject.POMClasses
         {
             SiteWidePOM site = new SiteWidePOM(driver);
             site.NavigateUsingNavLink("My account");
+            Console.WriteLine("Logout");
             driver.FindElement(By.LinkText("Logout")).Click();
         }
     }
