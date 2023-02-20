@@ -36,7 +36,7 @@ namespace FinalProject.POMClasses
 
             // Wait for product to be added to basket before moving on.
             MyHelpers help = new MyHelpers(driver);
-            help.WaitForElement(By.CssSelector("a.added_to_cart"), 2);
+            help.WaitForElement(By.CssSelector("a.added_to_cart"), 60);
 
             return true;
         }

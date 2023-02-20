@@ -22,11 +22,19 @@ namespace FinalProject.POMClasses
         // Edgewords Shop-specific setup
         public void NavigateToLoginPage()
         {
-            Console.WriteLine("Navigate to site");
+            Console.WriteLine("Navigate to login page");
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
 
             // Dismiss a banner that can get in the way
-            driver.FindElement(By.CssSelector("a.woocommerce-store-notice__dismiss-link")).Click();
+            try
+            {
+                driver.FindElement(By.CssSelector("a.woocommerce-store-notice__dismiss-link")).Click();
+            }
+            catch (ElementNotInteractableException)
+            {
+                Console.WriteLine("Banner already dismissed");
+            }
+            
         }
 
         public void Login(string username, string password)

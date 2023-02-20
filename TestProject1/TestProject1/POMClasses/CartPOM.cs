@@ -105,7 +105,7 @@ namespace FinalProject.POMClasses
             return Convert.ToDecimal(total);
         }
 
-        public void RemoveItemFromCart()
+        public void RemoveItemsFromCart()
         {
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
             MyHelpers help = new MyHelpers(driver);
