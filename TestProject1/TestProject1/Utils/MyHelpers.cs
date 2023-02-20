@@ -60,19 +60,19 @@ namespace FinalProject.Utils
 
         // Have some way of waiting for several poll times.
         public IWebElement? WaitForStaleElement(By locator,
-            int timeToWaitInMilliseconds, int pollingTimeInMilliseconds)
+            int totalTimeToWaitInMilliseconds,
+            int timeElementShouldBeStableForInMilliseconds = 500,
+            int timeToWaitBeforeRetryingInMilliseconds = 50)
         {
-            Console.WriteLine($"Polling time = {pollingTimeInMilliseconds}ms");
-
-            IWebElement element = driver.FindElement(locator);
+            IWebElement element;
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            bool elementIsThere = true;
+            bool elementIsThere;
 
             // If we've waited longer than we want to, end the loop.
-            while (stopWatch.ElapsedMilliseconds < timeToWaitInMilliseconds)
+            while (stopWatch.ElapsedMilliseconds < totalTimeToWaitInMilliseconds)
             {
                 try
                 {
@@ -82,36 +82,36 @@ namespace FinalProject.Utils
                     // Check if element has gone stale.
                     // Exception will be thrown if it has, which will restart
                     // the loop.
-
                     elementIsThere = element.Enabled;
 
-                    // If the element isn't stale, wait before checking it
-                    // again. The element may be unstable and go stale before
-                    // we pass it back.
-                    Thread.Sleep(pollingTimeInMilliseconds);
+                    // If the element isn't stale, wait before
+                    // checking it again.
+                    // Otherwise, the element may be unstable and go stale
+                    // before we pass it back.
+                    Thread.Sleep(timeElementShouldBeStableForInMilliseconds);
 
                     // Check if element has gone stale.
                     elementIsThere = element.Enabled;
 
                     // Getting this far means the element exists and is stable,
                     // so return it.
+                    Console.WriteLine("Stopwatch finished at: "
+                        + stopWatch.ElapsedMilliseconds.ToString() + "ms");
+                    stopWatch.Stop();
                     return element;
                 }
                 catch (StaleElementReferenceException)
                 {
                     Console.WriteLine("Element not stable - retry wait");
-                    // Wait for the polling time to expire, then check again.
-                    Thread.Sleep(pollingTimeInMilliseconds);
-                }
-                finally
-                {
-                    Console.WriteLine("Stopwatch finished at: "
-                        + stopWatch.ElapsedMilliseconds.ToString() + "ms");
-
-                    stopWatch.Stop();
+                    Thread.Sleep(timeToWaitBeforeRetryingInMilliseconds);
                 }
             }
-            
+
+            // In case it hadn't already stopped.
+            stopWatch.Stop();
+
+            Console.WriteLine("WaitForStaleElement timed out");
+            // Make sure what this is being passed back to can handle nulls
             return null;
         }
 
