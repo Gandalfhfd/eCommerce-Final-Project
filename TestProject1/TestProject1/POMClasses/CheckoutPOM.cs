@@ -38,19 +38,26 @@ namespace FinalProject.POMClasses
         public void PlaceOrder()
         {
             MyHelpers helpers= new MyHelpers(driver);
-            IWebElement orderButton;
+            IWebElement? orderButton;
 
             // Currently WaitForStaleElement is hardly better than a Thread.Sleep.
             // This must change. Remove this comment when it does.
-            orderButton = helpers.WaitForStaleElement(By.Id("place_order"), 8, 1000);
+            orderButton = helpers.WaitForStaleElement(By.Id("place_order"), 3000, 500);
 
             Console.WriteLine("Place order");
-            orderButton.Click();
-            Thread.Sleep(4000);
+
+            if (orderButton is not null)
+            {
+                orderButton.Click();
+            }
+            
         }
 
         public string GetOrderNumber()
         {
+            MyHelpers help = new MyHelpers(driver);
+            // Wait for this element to appear.
+            help.WaitForElement(By.CssSelector("li.order"), 2);
             string orderNumber = driver.FindElement(By.CssSelector("li.order"))
                 .Text;
 

@@ -26,16 +26,15 @@ namespace FinalProject.TestCases
 
             site.NavigateUsingNavLink("Cart");
 
+            // Consider using site.NavigateUsingNavLink here instead.
             CartPOM cart = new CartPOM(driver);
             cart.GoToCheckout();
 
-            // First name
-            // Last Name
-            // Street address
-            // Town/City
-            // Postcode
-            // Phone
-            // Place Order
+            CheckoutPOM checkout = new CheckoutPOM(driver);
+            checkout.EnterDetails();
+            checkout.PlaceOrder();
+            string orderNumber = checkout.GetOrderNumber();
+
         }
     }
 }
