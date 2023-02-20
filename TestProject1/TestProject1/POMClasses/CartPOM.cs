@@ -61,8 +61,7 @@ namespace FinalProject.POMClasses
 
             // Find subtotal in format <£a.b>.
             subtotal = driver.FindElement(
-                By.CssSelector("td[data-title='Subtotal'] > " +
-                        "span.woocommerce-Price-amount"))
+                By.CssSelector("tr.cart-subtotal > * > *"))
                 .Text;
 
             Console.WriteLine($"Subtotal = {subtotal}");
@@ -106,6 +105,10 @@ namespace FinalProject.POMClasses
 
         public void RemoveItemFromCart()
         {
+            // Could simply reduce quantity to 0 on all of them, then
+            // Update cart. Would be quicker and less prone to breakage.
+            // Need answer on why Try Catch isn't working, regardless.
+
             MyHelpers help = new MyHelpers(driver);
 
             Console.WriteLine("Attempt to remove all items from cart");
@@ -116,18 +119,36 @@ namespace FinalProject.POMClasses
             help.WaitForScroll(3);
 
             // Remove every item that you can.
+            // Currently only removes 1 item.
+            // Just does not work.
             for (int i = 0; i < 100; i++)
             {
-                try
+                if (help.IsElementPresent(By.CssSelector("p.cart-empty")))
                 {
-                    driver.FindElement(By.CssSelector("td.product-remove > *")).Click();
-                    Console.WriteLine($"Removed {i + 1} item from cart");
+                    /* An element declaring the cart is empty has apeared, so
+                     quit the function. */
+                    return;
                 }
-                catch (Exception)
+                else
                 {
-                    break;
+                    // The cart may not be empty, so keep trying to empty the cart.
+                    try
+                    {
+                        driver.FindElement(By.LinkText("×")).Click();
+                        Console.WriteLine($"Removed {i + 1} item from cart");
+                    }
+                    catch (NoSuchElementException)
+                    {
+                        //return;
+                        //throw new NoSuchElementException("blah");
+                    }
                 }
             }
+        }
+
+        public void GoToCheckout()
+        {
+            driver.FindElement(By.LinkText("Proceed to checkout")).Click();
         }
     }
 }
