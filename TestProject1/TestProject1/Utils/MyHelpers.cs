@@ -36,8 +36,8 @@ namespace FinalProject.Utils
 
         public void WaitForElement(By locator, int timeToWaitInSeconds)
         {
-            WebDriverWait wait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
-            wait2.Until(drv => drv.FindElement(locator).Enabled);
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
+            wait.Until(drv => drv.FindElement(locator).Enabled);
         }
 
         public void WaitForScroll(int timeToWaitInSeconds,
