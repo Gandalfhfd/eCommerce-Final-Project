@@ -85,5 +85,18 @@ namespace FinalProject.Utils
             int scrollPositionInt = (int)Convert.ToInt64(scrollPosition);
             return scrollPositionInt;
         }
+
+        public bool IsElementPresent(By locator)
+        {
+            try
+            {
+                driver.FindElement(locator);
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+        }
     }
 }
