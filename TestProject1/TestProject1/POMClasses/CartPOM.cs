@@ -155,7 +155,8 @@ namespace FinalProject.POMClasses
 
         public void GoToCheckout()
         {
-            driver.FindElement(By.LinkText("Proceed to checkout")).Click();
+            SiteWidePOM site = new SiteWidePOM(driver);
+            site.NavigateUsingNavLink("Proceed to checkout");
         }
     }
 }
