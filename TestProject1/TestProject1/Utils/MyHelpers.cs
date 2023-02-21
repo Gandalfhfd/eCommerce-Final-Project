@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
+using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V107.Debugger;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -50,14 +51,6 @@ namespace FinalProject.Utils
             wait.Until(drv => drv.FindElement(locator));
         }
 
-        public IWebElement NewWaitForElement(By locator, int timeToWaitInSeconds)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
-            IWebElement elementFound = wait.Until(drv => drv.FindElement(locator));
-
-            return elementFound;
-        }
-
         // Have some way of waiting for several poll times.
         public IWebElement? WaitForStaleElement(By locator,
             int totalTimeToWaitInMilliseconds,
@@ -98,7 +91,8 @@ namespace FinalProject.Utils
                     Console.WriteLine("Stopwatch finished at: "
                         + stopWatch.ElapsedMilliseconds.ToString() + "ms");
                     stopWatch.Stop();
-                    return element;
+
+                    return driver.FindElement(locator); ;
                 }
                 catch (StaleElementReferenceException)
                 {
@@ -172,6 +166,31 @@ namespace FinalProject.Utils
             {
                 return false;
             }
+        }
+
+        public void TakeScreensot(string screenshotName)
+        {
+            string screenshotDirectory = LoadParameterFromRunsettings("screenshotPath");
+
+            string screenshotPath = @screenshotDirectory + screenshotName +
+                DateTimeNow() + ".png";
+
+            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
+            Screenshot screenshot = ssdriver.GetScreenshot();
+
+            // Take screenshot. File name needs to be further configured.
+            screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
+
+            TestContext.AddTestAttachment(screenshotPath, screenshotName);
+        }
+
+        public string DateTimeNow()
+        // Provide date and time in ISO 8601 format.
+        {
+            DateTime date = DateTime.Now;
+            string output = date.ToString("yyyy-MM-ddTHHmmss");
+
+            return output;
         }
     }
 }
