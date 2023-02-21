@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Reports\Screenshots\" />
     <Folder Include="TestResults\" />
   </ItemGroup>
 
