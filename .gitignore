@@ -352,3 +352,7 @@ MigrationBackup/
 # Personal stuff
 *.pdf
 /TestProject1/TestProject1/mysettings.runsettings
+
+# Reports
+*.png
+/TestProject1/TestProject1/Reports*/
