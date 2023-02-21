@@ -22,7 +22,7 @@ namespace FinalProject.POMClasses
         // Edgewords Shop-specific setup
         public void NavigateToLoginPage()
         {
-            Console.WriteLine("Navigate to login page");
+            TestContext.WriteLine("Navigate to login page");
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
 
             // Dismiss a banner that can get in the way

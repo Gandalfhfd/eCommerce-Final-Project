@@ -67,6 +67,8 @@ namespace FinalProject.TestCases
             Assert.That(theoreticalTotal, Is.EqualTo(total),
                 "Total calculated after coupon & shipping is not correct");
 
+            help.TakeScreensot("End_of_Test_1");
+
             login.Logout();
         }
     }
