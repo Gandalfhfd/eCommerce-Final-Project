@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using FinalProject.POMClasses;
 using FinalProject.Utils;
+using System.Security.Principal;
 
 namespace FinalProject.TestCases
 {
@@ -35,6 +36,14 @@ namespace FinalProject.TestCases
             checkout.PlaceOrder();
             string orderNumber = checkout.GetOrderNumber();
 
+            site.NavigateUsingNavLink("My account");
+            site.NavigateUsingNavLink("Orders");
+            MyAccountPOM account = new MyAccountPOM(driver);
+            string accountOrderNumber = account.GetRecentOrderNumber();
+
+            Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
+
+            login.Logout();
         }
     }
 }
