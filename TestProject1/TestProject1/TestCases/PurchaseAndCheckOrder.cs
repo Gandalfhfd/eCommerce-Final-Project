@@ -36,12 +36,16 @@ namespace FinalProject.TestCases
             checkout.PlaceOrder();
             string orderNumber = checkout.GetOrderNumber();
 
+            help.TakeScreensot("Order_received_page");
+
             site.NavigateUsingNavLink("My account");
             site.NavigateUsingNavLink("Orders");
             MyAccountPOM account = new MyAccountPOM(driver);
             string accountOrderNumber = account.GetRecentOrderNumber();
 
             Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
+
+            help.TakeScreensot("My_account_Orders_page");
 
             login.Logout();
         }

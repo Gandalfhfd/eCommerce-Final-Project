@@ -22,6 +22,7 @@ namespace FinalProject.POMClasses
             string productSelectorString = $"Add “{productName}” to your cart";
             Console.WriteLine(productSelectorString);
 
+            MyHelpers help = new MyHelpers(driver);
             try
             {
                 driver.FindElement(By.CssSelector
@@ -31,11 +32,11 @@ namespace FinalProject.POMClasses
             catch (Exception)
             {
                 Console.WriteLine($"Could not add {productName} to cart");
+                help.TakeScreensot($"Failed_to_add_{productName}_to_cart");
                 return false;
             }
 
             // Wait for product to be added to basket before moving on.
-            MyHelpers help = new MyHelpers(driver);
             help.WaitForElement(By.CssSelector("a.added_to_cart"), 60);
 
             return true;

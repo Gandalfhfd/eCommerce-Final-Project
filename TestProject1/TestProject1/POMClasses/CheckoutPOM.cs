@@ -34,14 +34,16 @@ namespace FinalProject.POMClasses
             help.PutStringInInput(By.Id("billing_postcode"), customer.postcode);
             help.PutStringInInput(By.Id("billing_phone"), customer.phoneNumber);
             help.PutStringInInput(By.Id("billing_email"), customer.emailAddress);
+
+            help.TakeScreensot("entered_customer_details");
         }
 
         public void PlaceOrder()
         {
-            MyHelpers helpers = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver);
             IWebElement? orderButton;
 
-            orderButton = helpers.WaitForStaleElement(By.Id("place_order"), 3000, 500);
+            orderButton = help.WaitForStaleElement(By.Id("place_order"), 3000, 500);
 
             Console.WriteLine("Place order");
 
@@ -55,7 +57,7 @@ namespace FinalProject.POMClasses
                 catch (StaleElementReferenceException)
                 {
                     Console.WriteLine("Caught for the second time");
-                    orderButton = helpers.WaitForStaleElement(By.Id("place_order"), 3000, 500);
+                    orderButton = help.WaitForStaleElement(By.Id("place_order"), 3000, 500);
                     driver.FindElement(By.Id("place_order")).Click();
                 }
             }
@@ -63,6 +65,7 @@ namespace FinalProject.POMClasses
             {
                 Console.WriteLine("Place order button not available." +
                     "Order not placed.");
+                help.TakeScreensot("could_not_place_order");
             }
         }
 
