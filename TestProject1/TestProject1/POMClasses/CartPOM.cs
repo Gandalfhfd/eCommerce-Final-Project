@@ -1,15 +1,5 @@
 ﻿using FinalProject.Utils;
 using OpenQA.Selenium;
-using OpenQA.Selenium.DevTools.V107.Input;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Net.WebRequestMethods;
 
 namespace FinalProject.POMClasses
 {

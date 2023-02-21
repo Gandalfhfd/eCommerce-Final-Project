@@ -3,60 +3,14 @@ using FinalProject.Utils;
 using TechTalk.SpecFlow;
 using static FinalProject.Utils.HooksClass;
 
-namespace FinalProject.TestCases
+namespace FinalProject.Step_Definitions
 {
-    internal class PurchaseAndCheckOrder : BaseTest
-    {
-        [Test]
-        public void TestCase2()
-        {
-            MyHelpers help = new MyHelpers(driver);
-
-            // Load in username and password from external file.
-            string username = help.LoadParameterFromRunsettings("username");
-            string password = help.LoadParameterFromRunsettings("password");
-
-            LoginPagePOM login = new LoginPagePOM(driver);
-            login.Login(username, password);
-
-            SiteWidePOM site = new SiteWidePOM(driver);
-            site.NavigateUsingNavLink("Shop");
-
-            ShopPOM shop = new ShopPOM(driver);
-            shop.AddProductToCart("Belt");
-
-            site.NavigateUsingNavLink("Cart");
-
-            // Consider using site.NavigateUsingNavLink here instead.
-            CartPOM cart = new CartPOM(driver);
-            cart.GoToCheckout();
-
-            CheckoutPOM checkout = new CheckoutPOM(driver);
-            checkout.EnterDetails();
-            checkout.PlaceOrder();
-            string orderNumber = checkout.GetOrderNumber();
-
-            help.TakeScreensot("Order_received_page");
-
-            site.NavigateUsingNavLink("My account");
-            site.NavigateUsingNavLink("Orders");
-            MyAccountPOM account = new MyAccountPOM(driver);
-            string accountOrderNumber = account.GetRecentOrderNumber();
-
-            Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
-
-            help.TakeScreensot("My_account_Orders_page");
-
-            login.Logout();
-        }
-    }
-
     [Binding]
-    public class BDDTestCase2
+    public class BuyProductSteps
     {
         private readonly ScenarioContext _scenarioContext;
 
-        public BDDTestCase2(ScenarioContext scenarioContext)
+        public BuyProductSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
         }

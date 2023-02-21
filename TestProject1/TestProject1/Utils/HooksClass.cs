@@ -2,16 +2,18 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using TechTalk.SpecFlow;
 
 namespace FinalProject.Utils
 {
-    internal class BaseTest
+    [Binding]
+    internal class HooksClass
     {
-        protected IWebDriver driver;
+        public static IWebDriver driver;
         protected string baseUrl;
         protected string browser;
 
-        [SetUp]
+        [Before]
         public void SetUp()
         {
             MyHelpers help = new MyHelpers(driver);
@@ -54,7 +56,7 @@ namespace FinalProject.Utils
             Console.WriteLine("Test start");
         }
 
-        [TearDown]
+        [After]
         public void TearDown()
         {
             Console.WriteLine("Test end");
