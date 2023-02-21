@@ -9,8 +9,6 @@ namespace FinalProject.POMClasses
 {
     internal class SiteWidePOM
     {
-        // This is an instance class - it will need to be instantiated before use
-
         private IWebDriver driver;
 
         public SiteWidePOM(IWebDriver driver)

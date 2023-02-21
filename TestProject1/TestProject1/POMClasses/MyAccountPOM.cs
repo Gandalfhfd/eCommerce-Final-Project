@@ -24,6 +24,5 @@ namespace FinalProject.POMClasses
             Console.WriteLine($"Order number from My account = {orderNumber}");
             return orderNumber.Substring(1);
         }
-
     }
 }

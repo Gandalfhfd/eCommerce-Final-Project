@@ -34,7 +34,6 @@ namespace FinalProject.POMClasses
             {
                 Console.WriteLine("Banner already dismissed");
             }
-            
         }
 
         public void Login(string username, string password)
