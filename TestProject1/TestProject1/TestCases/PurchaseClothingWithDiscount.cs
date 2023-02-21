@@ -5,7 +5,7 @@ namespace FinalProject.TestCases
 {
     internal class PurchaseClothingWithDiscount : Utils.BaseTest
     {
-        [Test]
+        [Test, Ignore("Test now deprecated")]
         public void TestCase1()
         {
             MyHelpers help = new MyHelpers(driver);
@@ -48,7 +48,7 @@ namespace FinalProject.TestCases
             // Compare actual discount to desired discount.
             if (discount != desiredDiscount)
             {
-                Console.WriteLine($"Discount percentage is not " +
+                TestContext.WriteLine($"Discount percentage is not " +
                     $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
             }
 
@@ -61,7 +61,7 @@ namespace FinalProject.TestCases
 
             if (total != theoreticalTotal)
             {
-                Console.WriteLine($"Total is £{total}. It should be £{theoreticalTotal}");
+                TestContext.WriteLine($"Total is £{total}. It should be £{theoreticalTotal}");
             }
 
             Assert.That(theoreticalTotal, Is.EqualTo(total),

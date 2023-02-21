@@ -19,7 +19,7 @@ namespace FinalProject.POMClasses
 
             MyHelpers help = new MyHelpers(driver);
 
-            Console.WriteLine("Enter customer details");
+            TestContext.WriteLine("Enter customer details");
 
             help.PutStringInInput(By.Id("billing_first_name"), customer.firstName);
             help.PutStringInInput(By.Id("billing_last_name"), customer.lastName);
@@ -39,7 +39,7 @@ namespace FinalProject.POMClasses
 
             orderButton = help.WaitForStaleElement(By.Id("place_order"), 3000, 500);
 
-            Console.WriteLine("Place order");
+            TestContext.WriteLine("Place order");
 
             // Just awful design, but stale element exceptions are equally so.
             if (orderButton is not null)
@@ -50,14 +50,14 @@ namespace FinalProject.POMClasses
                 }
                 catch (StaleElementReferenceException)
                 {
-                    Console.WriteLine("Caught for the second time");
+                    TestContext.WriteLine("Caught for the second time");
                     orderButton = help.WaitForStaleElement(By.Id("place_order"), 3000, 500);
                     driver.FindElement(By.Id("place_order")).Click();
                 }
             }
             else
             {
-                Console.WriteLine("Place order button not available." +
+                TestContext.WriteLine("Place order button not available." +
                     "Order not placed.");
                 help.TakeScreensot("could_not_place_order");
             }
@@ -75,7 +75,7 @@ namespace FinalProject.POMClasses
             // This is likely to be brittle.
             orderNumber = orderNumber.Substring(15);
 
-            Console.WriteLine($"Order number = {orderNumber}");
+            TestContext.WriteLine($"Order number = {orderNumber}");
             return orderNumber;
         }
     }

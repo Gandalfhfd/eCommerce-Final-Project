@@ -16,7 +16,7 @@ namespace FinalProject.POMClasses
                 By.CssSelector("tr > .woocommerce-orders-table__cell-order-number > a"))
                 .Text;
 
-            Console.WriteLine($"Order number from My account = {orderNumber}");
+            TestContext.WriteLine($"Order number from My account = {orderNumber}");
             return orderNumber.Substring(1);
         }
     }

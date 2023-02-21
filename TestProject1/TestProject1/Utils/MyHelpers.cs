@@ -32,7 +32,7 @@ namespace FinalProject.Utils
             string? output = TestContext.Parameters[parameterName];
             if (output is null)
             {
-                Console.WriteLine($"Parameter <{parameterName}> not found");
+                TestContext.WriteLine($"Parameter <{parameterName}> not found");
                 output = $"Parameter <{parameterName}> not found";
             }
             return output;
@@ -81,7 +81,7 @@ namespace FinalProject.Utils
 
                     // Getting this far means the element exists and is stable,
                     // so return it.
-                    Console.WriteLine("Stopwatch finished at: "
+                    TestContext.WriteLine("Stopwatch finished at: "
                         + stopWatch.ElapsedMilliseconds.ToString() + "ms");
                     stopWatch.Stop();
 
@@ -89,7 +89,7 @@ namespace FinalProject.Utils
                 }
                 catch (StaleElementReferenceException)
                 {
-                    Console.WriteLine("Element not stable - retry wait");
+                    TestContext.WriteLine("Element not stable - retry wait");
                     Thread.Sleep(timeToWaitBeforeRetryingInMilliseconds);
                 }
             }
@@ -97,7 +97,7 @@ namespace FinalProject.Utils
             // In case it hadn't already stopped.
             stopWatch.Stop();
 
-            Console.WriteLine("WaitForStaleElement timed out");
+            TestContext.WriteLine("WaitForStaleElement timed out");
             // Make sure what this is being passed back to can handle nulls
             return null;
         }

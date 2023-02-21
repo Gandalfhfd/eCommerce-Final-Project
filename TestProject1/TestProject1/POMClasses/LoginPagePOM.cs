@@ -27,7 +27,7 @@ namespace FinalProject.POMClasses
             }
             catch (ElementNotInteractableException)
             {
-                Console.WriteLine("Banner already dismissed");
+                TestContext.WriteLine("Banner already dismissed");
             }
         }
 
@@ -38,15 +38,15 @@ namespace FinalProject.POMClasses
             // Let us use the helper library.
             MyHelpers help = new MyHelpers(driver);
 
-            Console.WriteLine("Log in");
+            TestContext.WriteLine("Log in");
 
-            Console.WriteLine("Input username");
+            TestContext.WriteLine("Input username");
             help.PutStringInInput(By.Id("username"), username);
 
-            Console.WriteLine("Input password");
+            TestContext.WriteLine("Input password");
             help.PutStringInInput(By.Id("password"), password);
 
-            Console.WriteLine("Submit login details");
+            TestContext.WriteLine("Submit login details");
             driver.FindElement(By.CssSelector("button.woocommerce-form-login__submit")).Click();
         }
 
@@ -54,7 +54,7 @@ namespace FinalProject.POMClasses
         {
             SiteWidePOM site = new SiteWidePOM(driver);
             site.NavigateUsingNavLink("My account");
-            Console.WriteLine("Logout");
+            TestContext.WriteLine("Logout");
             driver.FindElement(By.LinkText("Logout")).Click();
         }
     }

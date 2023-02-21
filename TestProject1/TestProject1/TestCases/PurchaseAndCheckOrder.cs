@@ -7,7 +7,7 @@ namespace FinalProject.TestCases
 {
     internal class PurchaseAndCheckOrder : BaseTest
     {
-        [Test]
+        [Test, Ignore("Test now deprecated")]
         public void TestCase2()
         {
             MyHelpers help = new MyHelpers(driver);

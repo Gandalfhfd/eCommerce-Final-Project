@@ -5,12 +5,20 @@ Feature: Buy a product
 Background:
 	Given I am logged in
 
-Scenario: Apply a coupon to a product
-	When I add an item to my cart
+Scenario Outline: Apply a coupon to a product
+	When I add '<product>' to my cart
 	And I apply a valid coupon
 	Then The appropriate discount should be applied
 
+Examples:
+	| product |
+	| Belt    |
+
 Scenario: Buy a product
-	When I add an item to my cart
+	When I add '<product>' to my cart
 	And I checkout using valid information
 	Then The order number presented should match the order in my account
+
+Examples:
+	| product |
+	| Belt    |

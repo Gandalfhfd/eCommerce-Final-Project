@@ -14,7 +14,7 @@ namespace FinalProject.POMClasses
         public bool AddProductToCart(string productName)
         {
             string productSelectorString = $"Add “{productName}” to your cart";
-            Console.WriteLine(productSelectorString);
+            TestContext.WriteLine(productSelectorString);
 
             MyHelpers help = new MyHelpers(driver);
             try
@@ -25,7 +25,7 @@ namespace FinalProject.POMClasses
             }
             catch (Exception)
             {
-                Console.WriteLine($"Could not add {productName} to cart");
+                TestContext.WriteLine($"Could not add {productName} to cart");
                 help.TakeScreensot($"Failed_to_add_{productName}_to_cart");
                 return false;
             }

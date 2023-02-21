@@ -21,7 +21,7 @@ namespace FinalProject.Utils
             browser = help.LoadParameterFromRunsettings("browser");
             baseUrl = help.LoadParameterFromRunsettings("baseUrl");
 
-            Console.WriteLine($"Read in browser var from commandline: {browser}");
+            TestContext.WriteLine($"Read in browser var from commandline: {browser}");
             browser = browser.ToLower().Trim();
 
             switch (browser)
@@ -31,7 +31,7 @@ namespace FinalProject.Utils
                 case "chrome":
                     driver = new ChromeDriver(); break;
                 default:
-                    Console.WriteLine("Unknown browser - starting chrome");
+                    TestContext.WriteLine("Unknown browser - starting chrome");
                     driver = new ChromeDriver();
                     break;
             }
@@ -50,16 +50,19 @@ namespace FinalProject.Utils
 
             login.Logout();
 
-            //Console.WriteLine(baseUrl);
-            //driver.Url = baseUrl;
-
-            Console.WriteLine("Test start");
+            TestContext.WriteLine("Test start");
         }
 
         [After]
         public void TearDown()
         {
-            Console.WriteLine("Test end");
+            TestContext.WriteLine("Test end");
+
+            CartPOM cart = new CartPOM(driver);
+            cart.RemoveItemsFromCart();
+
+            LoginPagePOM login = new LoginPagePOM(driver);
+            login.Logout();
             driver.Quit();
         }
     }

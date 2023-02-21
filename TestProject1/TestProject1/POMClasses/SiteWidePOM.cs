@@ -18,7 +18,7 @@ namespace FinalProject.POMClasses
 
         public void NavigateUsingNavLink(string linkText)
         {
-            Console.WriteLine($"Click on \"{linkText}\" link");
+            TestContext.WriteLine($"Click on \"{linkText}\" link");
             driver.FindElement(By.LinkText(linkText)).Click();
         }
     }

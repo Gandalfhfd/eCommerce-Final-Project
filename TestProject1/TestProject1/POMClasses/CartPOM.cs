@@ -16,11 +16,11 @@ namespace FinalProject.POMClasses
 
         public void ApplyCoupon(string coupon)
         {
-            Console.WriteLine("Enter coupon");
+            TestContext.WriteLine("Enter coupon");
             MyHelpers help = new MyHelpers(driver);
             help.PutStringInInput(By.Id("coupon_code"), coupon);
 
-            Console.WriteLine("Apply coupon");
+            TestContext.WriteLine("Apply coupon");
             driver.FindElement(By.CssSelector("button[value='Apply coupon']"))
                 .Click();
         }
@@ -40,7 +40,7 @@ namespace FinalProject.POMClasses
                         "span.woocommerce-Price-amount"))
                 .Text;
 
-            Console.WriteLine($"{discountAmount} of discount was applied");
+            TestContext.WriteLine($"{discountAmount} of discount was applied");
             // Remove currency symbol from discountAmount by removing first char.
             discountAmount = discountAmount.Substring(1);
 
@@ -56,7 +56,7 @@ namespace FinalProject.POMClasses
                 By.CssSelector("tr.cart-subtotal > * > *"))
                 .Text;
 
-            Console.WriteLine($"Subtotal = {subtotal}");
+            TestContext.WriteLine($"Subtotal = {subtotal}");
             // Remove currency symbol from subtotal by removing first char.
             subtotal = subtotal.Substring(1);
             return Convert.ToDecimal(subtotal);
@@ -71,7 +71,7 @@ namespace FinalProject.POMClasses
                 By.CssSelector("td[data-title='Shipping'] > * > *"))
                 .Text;
 
-            Console.WriteLine($"Shipping = {shipping.Substring(11)}");
+            TestContext.WriteLine($"Shipping = {shipping.Substring(11)}");
 
             // Grab the number from the shipping string
             shipping = shipping.Substring(12);
@@ -88,7 +88,7 @@ namespace FinalProject.POMClasses
                 By.CssSelector("td[data-title='Total'] > *"))
                 .Text;
 
-            Console.WriteLine($"Total = {total}");
+            TestContext.WriteLine($"Total = {total}");
 
             // Remove currency symbol from total by removing first char.
             total = total.Substring(1);
@@ -100,7 +100,7 @@ namespace FinalProject.POMClasses
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
             MyHelpers help = new MyHelpers(driver);
 
-            Console.WriteLine("Attempt to remove all items from cart");
+            TestContext.WriteLine("Attempt to remove all items from cart");
 
             // Check if we can find any of the quantitites
             bool elementPresent;
@@ -109,7 +109,7 @@ namespace FinalProject.POMClasses
 
             if (elementPresent == false)
             {
-                Console.WriteLine("No items in cart");
+                TestContext.WriteLine("No items in cart");
                 return;
             }
 

@@ -28,14 +28,14 @@ namespace FinalProject.Step_Definitions
             login.Login(username, password);
         }
 
-        [When(@"I add an item to my cart")]
-        public void WhenIAddAnItemToMyCart()
+        [When(@"I add '(.*)' to my cart")]
+        public void WhenIAddAnItemToMyCart(string productName)
         {
             SiteWidePOM site = new SiteWidePOM(driver);
             site.NavigateUsingNavLink("Shop");
 
             ShopPOM shop = new ShopPOM(driver);
-            shop.AddProductToCart("Belt");
+            shop.AddProductToCart(productName);
         }
 
         [When(@"I apply a valid coupon")]
@@ -122,7 +122,7 @@ namespace FinalProject.Step_Definitions
             }
             catch (AssertionException)
             {
-                Console.WriteLine($"Discount percentage is not " +
+                TestContext.WriteLine($"Discount percentage is not " +
                     $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
             }
 
@@ -139,7 +139,7 @@ namespace FinalProject.Step_Definitions
             }
             catch (AssertionException)
             {
-                Console.WriteLine($"Total is £{total}." +
+                TestContext.WriteLine($"Total is £{total}." +
                     $"It should be £{theoreticalTotal}");
             }
 
