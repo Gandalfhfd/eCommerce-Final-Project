@@ -14,7 +14,7 @@ Examples:
 	| product |
 	| Belt    |
 
-Scenario: Buy a product
+Scenario Outline: Buy a product
 	When I add '<product>' to my cart
 	And I checkout using valid information
 	Then The order number presented should match the order in my account
