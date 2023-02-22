@@ -10,8 +10,8 @@ namespace FinalProject.Utils
     internal class HooksClass
     {
         public static IWebDriver driver;
-        protected string baseUrl;
-        protected string browser;
+        protected string baseUrl = "baseUrl not found";
+        protected string browser = "browser not found";
 
         [Before]
         public void SetUp()
