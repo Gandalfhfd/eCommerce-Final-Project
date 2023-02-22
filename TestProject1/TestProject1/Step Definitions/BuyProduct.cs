@@ -1,5 +1,6 @@
 ﻿using FinalProject.POMClasses;
 using FinalProject.Utils;
+using OpenQA.Selenium;
 using TechTalk.SpecFlow;
 using static FinalProject.Utils.HooksClass;
 
@@ -48,7 +49,17 @@ namespace FinalProject.Step_Definitions
 
             CartPOM cart = new CartPOM(driver);
             string coupon = help.LoadParameterFromRunsettings("coupon");
+            Console.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
+            help.WaitForElement(By.CssSelector("div[role='alert']"), 2);
+
+            string alertText = driver.FindElement(By.CssSelector("div[role='alert']")).Text;
+
+            if (alertText != "Coupon code applied successfully.")
+            {
+                Console.WriteLine("Coupon may have not been applied successfully.");
+                help.TakeScreensot("coupon_application_failed");
+            }
         }
 
 
@@ -97,8 +108,6 @@ namespace FinalProject.Step_Definitions
             site.NavigateUsingNavLink("Cart");
 
             CartPOM cart = new CartPOM(driver);
-            string coupon = help.LoadParameterFromRunsettings("coupon");
-            cart.ApplyCoupon(coupon);
 
             decimal discount = cart.GetCouponDiscount();
 

@@ -5,7 +5,7 @@ namespace FinalProject.TestCases
 {
     internal class PurchaseClothingWithDiscount : Utils.BaseTest
     {
-        [Test, Ignore("Test now deprecated")]
+        [Test, Ignore("Deprecated")]
         public void TestCase1()
         {
             MyHelpers help = new MyHelpers(driver);
