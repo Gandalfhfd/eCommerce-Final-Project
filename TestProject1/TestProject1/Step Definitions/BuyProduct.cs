@@ -135,24 +135,49 @@ namespace FinalProject.Step_Definitions
                     $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
             }
 
+            if (discount == desiredDiscount)
+            {
+                Console.WriteLine("Desired discount matches actual discount");
+            }
+
             decimal shipping = cart.GetShipping();
 
             // Calculate total based on previously captured values.
-            decimal theoreticalTotal = subtotal + shipping - discount;
+            decimal theoreticalTotalActualDiscount = subtotal + shipping - discount;
+
+            // Calculate total based on previously captured subtotal and
+            // shipping, but with desiredDiscount instead of captured discount
+            decimal theoreticalTotalDesiredDiscount = subtotal + shipping - desiredDiscount;
+
             // Get total as displayed on webpage.
             decimal total = cart.GetTotal();
 
             try
             {
-                Assert.That(total, Is.EqualTo(theoreticalTotal));
+                Assert.That(total, Is.EqualTo(theoreticalTotalActualDiscount));
             }
             catch (AssertionException)
             {
                 TestContext.WriteLine($"Total is £{total}." +
-                    $"It should be £{theoreticalTotal}");
+                    $"It should be £{theoreticalTotalActualDiscount}");
             }
 
-            help.TakeScreensot("End_of_Test_1");
+            if (total == theoreticalTotalActualDiscount)
+            {
+                Console.WriteLine("Total matches expected");
+            }
+            else if (total == theoreticalTotalDesiredDiscount)
+            {
+                Console.WriteLine("Total does not match expected, but it was" +
+                    " calculated correctly from the subtotal, discount, and " +
+                    "shipping displayed on the page.");
+            }
+            else
+            {
+                Console.WriteLine("Total was calculated incorrectly");
+            }
+
+            help.TakeScreensot("Cart_After_Attempting_Coupon_Application");
         }
     }
 }
