@@ -59,10 +59,28 @@ namespace FinalProject.Utils
             TestContext.WriteLine("Test end");
 
             CartPOM cart = new CartPOM(driver);
-            cart.RemoveItemsFromCart();
+            // Try catch ensures driver.Quit() is called.
+            try
+            {
+                cart.RemoveItemsFromCart();
+            }
+            catch (Exception)
+            {
+                TestContext.WriteLine("Could not remove items from cart");
+            }
 
             LoginPagePOM login = new LoginPagePOM(driver);
-            login.Logout();
+            // Try catch ensures driver.Quit() is called.
+            try
+            {
+                login.Logout();
+
+            }
+            catch (Exception)
+            {
+                TestContext.WriteLine("Could not log out");
+            }
+
             driver.Quit();
         }
     }

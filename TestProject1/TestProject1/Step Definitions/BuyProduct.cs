@@ -22,11 +22,14 @@ namespace FinalProject.Step_Definitions
             MyHelpers help = new MyHelpers(driver);
 
             // Load in username and password from external file.
-            string username = help.LoadParameterFromRunsettings("username");
-            string password = help.LoadParameterFromRunsettings("password");
+            //string username = help.LoadParameterFromRunsettings("username");
+            string username = help.LoadEnvironmentVariable("username");
+            string password = help.LoadEnvironmentVariable("password");
 
             LoginPagePOM login = new LoginPagePOM(driver);
             login.Login(username, password);
+
+            help.TakeScreensot("Logged_In");
         }
 
         [When(@"I add '(.*)' to my cart")]
@@ -37,6 +40,9 @@ namespace FinalProject.Step_Definitions
 
             ShopPOM shop = new ShopPOM(driver);
             shop.AddProductToCart(productName);
+
+            MyHelpers help = new MyHelpers(driver);
+            help.TakeScreensot($"{productName}_added_to_cart");
         }
 
         [When(@"I apply a valid coupon")]
@@ -76,6 +82,9 @@ namespace FinalProject.Step_Definitions
             CheckoutPOM checkout = new CheckoutPOM(driver);
             checkout.EnterDetails();
             checkout.PlaceOrder();
+
+            MyHelpers help = new MyHelpers(driver);
+            help.TakeScreensot("checked_out");
         }
 
         [Then(@"The order number presented should match the order in my account")]
@@ -146,7 +155,7 @@ namespace FinalProject.Step_Definitions
             decimal theoreticalTotalActualDiscount = subtotal + shipping - discount;
 
             // Calculate total based on previously captured subtotal and
-            // shipping, but with desiredDiscount instead of captured discount
+            // shipping, but with desiredDiscount instead of captured discount.
             decimal theoreticalTotalDesiredDiscount = subtotal + shipping - desiredDiscount;
 
             // Get total as displayed on webpage.

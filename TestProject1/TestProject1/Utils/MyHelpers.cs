@@ -38,6 +38,17 @@ namespace FinalProject.Utils
             return output;
         }
 
+        public string LoadEnvironmentVariable(string variableName)
+        {
+            string? output = Environment.GetEnvironmentVariable(variableName);
+            if (output is null)
+            {
+                TestContext.WriteLine($"Environment variable <{variableName}> not found");
+                output = $"Environment variable <{variableName}> not found";
+            }
+            return output;
+        }
+
         public void WaitForElement(By locator, int timeToWaitInSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
@@ -98,6 +109,8 @@ namespace FinalProject.Utils
             stopWatch.Stop();
 
             TestContext.WriteLine("WaitForStaleElement timed out");
+            TakeScreensot("Element_Still_Stale");
+
             // Make sure what this is being passed back to can handle nulls
             return null;
         }
@@ -157,6 +170,8 @@ namespace FinalProject.Utils
             }
             catch (NoSuchElementException)
             {
+                // Not sure how to properly label this screenshot.
+                TakeScreensot("element_not_found");
                 return false;
             }
         }
