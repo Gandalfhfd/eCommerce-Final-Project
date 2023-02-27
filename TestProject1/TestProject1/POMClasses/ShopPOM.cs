@@ -6,7 +6,11 @@ namespace FinalProject.POMClasses
     internal class ShopPOM
     {
         private By btnViewCart = By.CssSelector("a.added_to_cart");
+        private string _productSelectorString;
+        private By btnAddToCart => By.CssSelector($"a[aria-label='{_productSelectorString}']");
+
         private IWebDriver driver;
+
         public ShopPOM(IWebDriver driver)
         {
             this.driver = driver;
@@ -14,15 +18,13 @@ namespace FinalProject.POMClasses
 
         public bool AddProductToCart(string productName)
         {
-            string productSelectorString = $"Add “{productName}” to your cart";
-            TestContext.WriteLine(productSelectorString);
+            _productSelectorString = $"Add “{productName}” to your cart";
+            TestContext.WriteLine(_productSelectorString);
 
             MyHelpers help = new MyHelpers(driver);
             try
             {
-                driver.FindElement(By.CssSelector
-                    ($"a[aria-label='{productSelectorString}']"))
-                    .Click();
+                driver.FindElement(btnAddToCart).Click();
             }
             catch (Exception)
             {
@@ -32,7 +34,7 @@ namespace FinalProject.POMClasses
             }
 
             // Wait for product to be added to basket before moving on.
-            help.WaitForElement(btnViewCart, 60);
+            help.WaitForElement(btnAddToCart, 6);
 
             return true;
         }

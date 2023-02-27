@@ -11,6 +11,9 @@ namespace FinalProject.POMClasses
     {
         private IWebDriver driver;
 
+        private string _linkText;
+        private By lnkLink => By.LinkText(_linkText);
+
         public SiteWidePOM(IWebDriver driver)
         {
             this.driver = driver;
@@ -18,8 +21,9 @@ namespace FinalProject.POMClasses
 
         public void NavigateUsingNavLink(string linkText)
         {
+            _linkText = linkText;
             TestContext.WriteLine($"Click on \"{linkText}\" link");
-            driver.FindElement(By.LinkText(linkText)).Click();
+            driver.FindElement(lnkLink).Click();
         }
     }
 }
