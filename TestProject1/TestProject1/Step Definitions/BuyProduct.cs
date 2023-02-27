@@ -45,8 +45,8 @@ namespace FinalProject.Step_Definitions
             help.TakeScreensot($"{productName}_added_to_cart");
         }
 
-        [When(@"I apply a valid coupon")]
-        public void WhenIApplyAValidCoupon()
+        [When(@"I apply the coupon '(.*)'")]
+        public void WhenIApplyAValidCoupon(string coupon)
         {
             MyHelpers help = new MyHelpers(driver);
 
@@ -54,7 +54,6 @@ namespace FinalProject.Step_Definitions
             site.NavigateUsingNavLink("Cart");
 
             CartPOM cart = new CartPOM(driver);
-            string coupon = help.LoadParameterFromRunsettings("coupon");
             Console.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
             help.WaitForElement(By.CssSelector("div[role='alert']"), 2);
@@ -108,10 +107,12 @@ namespace FinalProject.Step_Definitions
             help.TakeScreensot("My_account_Orders_page");
         }
 
-        [Then(@"The appropriate discount should be applied")]
-        public void ThenTheAppropriateDiscountShouldBeApplied()
+        [Then(@"A discount of '(.*)' should be applied")]
+        public void ThenTheAppropriateDiscountShouldBeApplied(string strPercentage)
         {
             MyHelpers help = new MyHelpers(driver);
+            decimal desiredDiscountPercent = help.ConvertStringPercentToDecimal(strPercentage);
+
             SiteWidePOM site = new SiteWidePOM(driver);
 
             site.NavigateUsingNavLink("Cart");
@@ -125,8 +126,8 @@ namespace FinalProject.Step_Definitions
 
             decimal discountPercent = discount / subtotal;
 
-            decimal desiredDiscountPercent = Convert.ToDecimal(
-                help.LoadParameterFromRunsettings("discountPercentage"));
+            //decimal desiredDiscountPercent = Convert.ToDecimal(
+            //    help.LoadParameterFromRunsettings("discountPercentage"));
 
             // Find absolute desired discount. Must be rounded to 2 d.p.
             decimal desiredDiscount = desiredDiscountPercent * subtotal;

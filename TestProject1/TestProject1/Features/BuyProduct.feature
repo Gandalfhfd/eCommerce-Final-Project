@@ -7,8 +7,8 @@ Background:
 
 Scenario Outline: Apply a coupon to a product
 	When I add '<product>' to my cart
-	And I apply a valid coupon
-	Then The appropriate discount should be applied
+	And I apply the coupon 'edgewords'
+	Then A discount of '15%' should be applied
 
 Examples:
 	| product |

@@ -200,5 +200,26 @@ namespace FinalProject.Utils
 
             return output;
         }
+
+        public decimal ConvertStringPercentToDecimal(string percentageString)
+        {
+            // Convert a string in the format xx% to 0.xx.
+            // For example, 15% becomes 0.15.
+
+            decimal output = 0;
+
+            // Remove the %.
+            string barePercent = Truncate(percentageString, 1);
+
+            // For example, convert 15 to 0.15 with the type decimal.
+            output = Convert.ToDecimal(barePercent) * 0.01m;
+
+            return output;
+        }
+
+        public string Truncate(string text, int numCharsToBeTruncated)
+        {
+            return text.Substring(0, text.Length - numCharsToBeTruncated);
+        }
     }
 }
