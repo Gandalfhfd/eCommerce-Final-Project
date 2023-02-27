@@ -5,6 +5,7 @@ namespace FinalProject.POMClasses
 {
     internal class ShopPOM
     {
+        private By btnViewCart = By.CssSelector("a.added_to_cart");
         private IWebDriver driver;
         public ShopPOM(IWebDriver driver)
         {
@@ -31,7 +32,7 @@ namespace FinalProject.POMClasses
             }
 
             // Wait for product to be added to basket before moving on.
-            help.WaitForElement(By.CssSelector("a.added_to_cart"), 60);
+            help.WaitForElement(btnViewCart, 60);
 
             return true;
         }

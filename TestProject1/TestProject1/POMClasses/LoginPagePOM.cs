@@ -5,7 +5,12 @@ namespace FinalProject.POMClasses
 {
     internal class LoginPagePOM
     {
-        // This is an instance class - it will need to be instantiated before use
+
+        private By btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
+        private By txtUsername = By.Id("username");
+        private By txtPassword = By.Id("password");
+        private By btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
+        private By btnLogout = By.LinkText("Logout");
 
         private IWebDriver driver;
 
@@ -23,7 +28,7 @@ namespace FinalProject.POMClasses
             // Dismiss a banner that can get in the way
             try
             {
-                driver.FindElement(By.CssSelector("a.woocommerce-store-notice__dismiss-link")).Click();
+                driver.FindElement(btnDismissStoreNotice).Click();
             }
             catch (ElementNotInteractableException)
             {
@@ -41,13 +46,13 @@ namespace FinalProject.POMClasses
             TestContext.WriteLine("Log in");
 
             TestContext.WriteLine("Input username");
-            help.PutStringInInput(By.Id("username"), username);
+            help.PutStringInInput(txtUsername, username);
 
             TestContext.WriteLine("Input password");
-            help.PutStringInInput(By.Id("password"), password);
+            help.PutStringInInput(txtPassword, password);
 
             TestContext.WriteLine("Submit login details");
-            driver.FindElement(By.CssSelector("button.woocommerce-form-login__submit")).Click();
+            driver.FindElement(btnLogin).Click();
         }
 
         public void Logout()
@@ -55,7 +60,7 @@ namespace FinalProject.POMClasses
             SiteWidePOM site = new SiteWidePOM(driver);
             site.NavigateUsingNavLink("My account");
             TestContext.WriteLine("Logout");
-            driver.FindElement(By.LinkText("Logout")).Click();
+            driver.FindElement(btnLogout).Click();
         }
     }
 }
