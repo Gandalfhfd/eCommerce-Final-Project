@@ -178,7 +178,7 @@ namespace FinalProject.Utils
 
         public void TakeScreensot(string screenshotName)
         {
-            string screenshotDirectory = LoadParameterFromRunsettings("screenshotPath");
+            string screenshotDirectory = LoadEnvironmentVariable("screenshotPath");
 
             string screenshotPath = @screenshotDirectory + screenshotName +
                 DateTimeNow() + ".png";

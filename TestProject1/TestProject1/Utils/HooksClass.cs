@@ -18,10 +18,10 @@ namespace FinalProject.Utils
         {
             MyHelpers help = new MyHelpers(driver);
 
-            browser = help.LoadParameterFromRunsettings("browser");
-            baseUrl = help.LoadParameterFromRunsettings("baseUrl");
+            browser = help.LoadEnvironmentVariable("browser");
+            baseUrl = help.LoadEnvironmentVariable("baseUrl");
 
-            TestContext.WriteLine($"Read in browser var from commandline: {browser}");
+            TestContext.WriteLine($"Read in browser var from runsettings: {browser}");
             browser = browser.ToLower().Trim();
 
             switch (browser)
@@ -37,8 +37,8 @@ namespace FinalProject.Utils
             }
 
             // Load in username and password from external file.
-            string username = help.LoadParameterFromRunsettings("username");
-            string password = help.LoadParameterFromRunsettings("password");
+            string username = help.LoadEnvironmentVariable("username");
+            string password = help.LoadEnvironmentVariable("password");
 
             // Log in so that we can view the cart.
             LoginPagePOM login = new LoginPagePOM(driver);
