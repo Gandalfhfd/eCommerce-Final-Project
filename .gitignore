@@ -357,3 +357,4 @@ MigrationBackup/
 *.png
 /TestProject1/TestProject1/Reports*/
 /TestProject1/TestProject1/LivingDocumentation*/
+*.html
