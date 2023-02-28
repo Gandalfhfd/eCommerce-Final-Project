@@ -9,17 +9,26 @@ namespace FinalProject.Utils
     [Binding]
     internal class HooksClass
     {
-        public static IWebDriver driver;
+        public static IWebDriver? driver;
+        private readonly ScenarioContext _scenarioContext;
+
         protected string baseUrl = "baseUrl not found";
         protected string browser = "browser not found";
 
+        public HooksClass(ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+        }
+
         [Before]
         public void SetUp()
-        {
-            MyHelpers help = new MyHelpers(driver);
+        {   
+            _scenarioContext["mydriver"] = driver;
 
-            browser = help.LoadEnvironmentVariable("browser");
-            baseUrl = help.LoadEnvironmentVariable("baseUrl");
+            MyHelpers help = new MyHelpers(driver);
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
+            browser = nonDriverHelp.LoadEnvironmentVariable("browser");
+            baseUrl = nonDriverHelp.LoadEnvironmentVariable("baseUrl");
 
             TestContext.WriteLine($"Read in browser var from runsettings: {browser}");
             browser = browser.ToLower().Trim();
@@ -37,8 +46,9 @@ namespace FinalProject.Utils
             }
 
             // Load in username and password from external file.
-            string username = help.LoadEnvironmentVariable("username");
-            string password = help.LoadEnvironmentVariable("password");
+            NonDriverHelpers nonDriverHelpers = new NonDriverHelpers();
+            string username = nonDriverHelpers.LoadEnvironmentVariable("username");
+            string password = nonDriverHelpers.LoadEnvironmentVariable("password");
 
             // Log in so that we can view the cart.
             LoginPagePOM login = new LoginPagePOM(driver);

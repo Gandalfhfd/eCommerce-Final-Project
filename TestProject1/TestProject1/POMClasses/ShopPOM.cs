@@ -18,8 +18,7 @@ namespace FinalProject.POMClasses
 
         public bool AddProductToCart(string productName)
         {
-            _productSelectorString = $"Add “{productName}” to your cart";
-            TestContext.WriteLine(_productSelectorString);
+            TestContext.WriteLine($"Add “{productName}” to your cart");
 
             MyHelpers help = new MyHelpers(driver);
             try

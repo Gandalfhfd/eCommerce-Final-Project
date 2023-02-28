@@ -27,28 +27,6 @@ namespace FinalProject.Utils
             textField.SendKeys(text);
         }
 
-        public string LoadParameterFromRunsettings(string parameterName)
-        {
-            string? output = TestContext.Parameters[parameterName];
-            if (output is null)
-            {
-                TestContext.WriteLine($"Parameter <{parameterName}> not found");
-                output = $"Parameter <{parameterName}> not found";
-            }
-            return output;
-        }
-
-        public string LoadEnvironmentVariable(string variableName)
-        {
-            string? output = Environment.GetEnvironmentVariable(variableName);
-            if (output is null)
-            {
-                TestContext.WriteLine($"Environment variable <{variableName}> not found");
-                output = $"Environment variable <{variableName}> not found";
-            }
-            return output;
-        }
-
         public void WaitForElement(By locator, int timeToWaitInSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
@@ -121,7 +99,8 @@ namespace FinalProject.Utils
             int scrollPosition1;
             int scrollPosition2;
 
-            int maxIter = FindMaxIterations(timeToWaitInSeconds,
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
+            int maxIter = nonDriverHelp.FindMaxIterations(timeToWaitInSeconds,
                 pollingTimeInMilliseconds);
 
             for (int i = 0; i < maxIter; i++)
@@ -136,18 +115,6 @@ namespace FinalProject.Utils
                     break;
                 }
             }
-        }
-
-        private static int FindMaxIterations(int timeToWaitInSeconds,
-            int iterationLengthInMilliseconds)
-        {
-            // Calculate maximum number of iterations as a non-whole number.
-            double nonIntegerMaxIter =
-                1000 * timeToWaitInSeconds / iterationLengthInMilliseconds;
-
-            // Round up and cast to int
-            int maxIter = Convert.ToInt32(Math.Ceiling(nonIntegerMaxIter));
-            return maxIter;
         }
 
         public int GetCurrentScrollPosition()
@@ -178,10 +145,11 @@ namespace FinalProject.Utils
 
         public void TakeScreensot(string screenshotName)
         {
-            string screenshotDirectory = LoadEnvironmentVariable("screenshotPath");
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
+            string screenshotDirectory = nonDriverHelp.LoadEnvironmentVariable("screenshotPath");
 
             string screenshotPath = @screenshotDirectory + screenshotName +
-                DateTimeNow() + ".png";
+                nonDriverHelp.DateTimeNow() + ".png";
 
             ITakesScreenshot ssdriver = driver as ITakesScreenshot;
             Screenshot screenshot = ssdriver.GetScreenshot();
@@ -190,36 +158,6 @@ namespace FinalProject.Utils
             screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
 
             TestContext.AddTestAttachment(screenshotPath, screenshotName);
-        }
-
-        public string DateTimeNow()
-        // Provide date and time in ISO 8601 format.
-        {
-            DateTime date = DateTime.Now;
-            string output = date.ToString("yyyy-MM-ddTHHmmss");
-
-            return output;
-        }
-
-        public decimal ConvertStringPercentToDecimal(string percentageString)
-        {
-            // Convert a string in the format xx% to 0.xx.
-            // For example, 15% becomes 0.15.
-
-            decimal output = 0;
-
-            // Remove the %.
-            string barePercent = Truncate(percentageString, 1);
-
-            // For example, convert 15 to 0.15 with the type decimal.
-            output = Convert.ToDecimal(barePercent) * 0.01m;
-
-            return output;
-        }
-
-        public string Truncate(string text, int numCharsToBeTruncated)
-        {
-            return text.Substring(0, text.Length - numCharsToBeTruncated);
         }
     }
 }

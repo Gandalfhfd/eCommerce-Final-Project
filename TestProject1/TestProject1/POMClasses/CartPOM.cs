@@ -5,11 +5,8 @@ namespace FinalProject.POMClasses
 {
     internal class CartPOM
     {
-        // This is an instance class - it will need to be instantiated before use.
-
         private IWebDriver driver;
 
-        // Locators.
         private By lblCoupon = By.Id("coupon_code");
         private By btnApplyCoupon = By.CssSelector("button[value='Apply coupon']");
         private By lblDiscount = By.CssSelector("td[data-title*='Coupon:'] " +

@@ -2,29 +2,29 @@
 using FinalProject.Utils;
 using OpenQA.Selenium;
 using TechTalk.SpecFlow;
-using static FinalProject.Utils.HooksClass;
 
 namespace FinalProject.Step_Definitions
 {
     [Binding]
     public class BuyProductSteps
     {
+        private IWebDriver driver;
         private readonly ScenarioContext _scenarioContext;
 
         public BuyProductSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
+            this.driver = (IWebDriver)_scenarioContext["mydriver"];
         }
 
         [Given(@"I am logged in")]
         public void GivenIHaveLoggedIn()
         {
             MyHelpers help = new MyHelpers(driver);
-
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             // Load in username and password from external file.
-            //string username = help.LoadParameterFromRunsettings("username");
-            string username = help.LoadEnvironmentVariable("username");
-            string password = help.LoadEnvironmentVariable("password");
+            string username = nonDriverHelp.LoadEnvironmentVariable("username");
+            string password = nonDriverHelp.LoadEnvironmentVariable("password");
 
             LoginPagePOM login = new LoginPagePOM(driver);
             login.Login(username, password);
@@ -111,7 +111,8 @@ namespace FinalProject.Step_Definitions
         public void ThenTheAppropriateDiscountShouldBeApplied(string strPercentage)
         {
             MyHelpers help = new MyHelpers(driver);
-            decimal desiredDiscountPercent = help.ConvertStringPercentToDecimal(strPercentage);
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
+            decimal desiredDiscountPercent = nonDriverHelp.ConvertStringPercentToDecimal(strPercentage);
 
             SiteWidePOM site = new SiteWidePOM(driver);
 

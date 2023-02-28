@@ -5,6 +5,7 @@ namespace FinalProject.POMClasses
 {
     internal class LoginPagePOM
     {
+        private IWebDriver driver;
 
         private By btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
         private By txtUsername = By.Id("username");
@@ -12,11 +13,11 @@ namespace FinalProject.POMClasses
         private By btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
         private By btnLogout = By.LinkText("Logout");
 
-        private IWebDriver driver;
-
         public LoginPagePOM(IWebDriver driver)
         {
+            Console.WriteLine("In LoginPagePOM constructor");
             this.driver = driver;
+            Console.WriteLine("Set driver in LoginPagePOM");
         }
 
         // Edgewords Shop-specific setup

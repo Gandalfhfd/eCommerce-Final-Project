@@ -10,7 +10,6 @@ namespace FinalProject.Classes
 {
     internal class Customer
     {
-        private IWebDriver driver;
         public string firstName { get; }
         public string lastName { get; }
         public string streetAddress { get; }
@@ -21,18 +20,17 @@ namespace FinalProject.Classes
 
         public string orderNumber { get; set; }
 
-        public Customer(IWebDriver driver)
+        public Customer()
         {
-            this.driver = driver;
-            MyHelpers help = new MyHelpers(driver);
+            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
 
-            this.firstName = help.LoadParameterFromRunsettings("firstName");
-            this.lastName = help.LoadParameterFromRunsettings("lastName");
-            this.streetAddress = help.LoadParameterFromRunsettings("streetAddress");
-            this.townCity = help.LoadParameterFromRunsettings("townCity");
-            this.postcode = help.LoadParameterFromRunsettings("postcode");
-            this.phoneNumber = help.LoadParameterFromRunsettings("phoneNumber");
-            this.emailAddress = help.LoadParameterFromRunsettings("emailAddress");
+            this.firstName = nonDriverHelp.LoadParameterFromRunsettings("firstName");
+            this.lastName = nonDriverHelp.LoadParameterFromRunsettings("lastName");
+            this.streetAddress = nonDriverHelp.LoadParameterFromRunsettings("streetAddress");
+            this.townCity = nonDriverHelp.LoadParameterFromRunsettings("townCity");
+            this.postcode = nonDriverHelp.LoadParameterFromRunsettings("postcode");
+            this.phoneNumber = nonDriverHelp.LoadParameterFromRunsettings("phoneNumber");
+            this.emailAddress = nonDriverHelp.LoadParameterFromRunsettings("emailAddress");
 
             this.orderNumber = "Order Number Not Set";
         }

@@ -25,7 +25,7 @@ namespace FinalProject.POMClasses
         public void EnterDetails()
         {
             // Instantiating grabs customer details from runsettings file.
-            Customer customer = new Customer(driver);
+            Customer customer = new Customer();
 
             MyHelpers help = new MyHelpers(driver);
 
