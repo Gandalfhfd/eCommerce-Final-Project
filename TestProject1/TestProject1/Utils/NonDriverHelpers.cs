@@ -67,7 +67,7 @@ namespace FinalProject.Utils
             return output;
         }
 
-        public0 string Truncate(string text, int numCharsToBeTruncated)
+        public string Truncate(string text, int numCharsToBeTruncated)
         {
             return text.Substring(0, text.Length - numCharsToBeTruncated);
         }
