@@ -23,7 +23,7 @@ namespace FinalProject.Utils
         [Before]
         public void SetUp()
         {   
-            _scenarioContext["mydriver"] = driver;
+            _scenarioContext["testString"] = "Lorem ipsum";
 
             MyHelpers help = new MyHelpers(driver);
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
@@ -44,6 +44,9 @@ namespace FinalProject.Utils
                     driver = new ChromeDriver();
                     break;
             }
+
+            // Share the driver with anyone who wants it.
+            _scenarioContext["mydriver"] = driver;
 
             // Load in username and password from external file.
             NonDriverHelpers nonDriverHelpers = new NonDriverHelpers();

@@ -9,10 +9,13 @@ namespace FinalProject.Step_Definitions
     public class BuyProductSteps
     {
         private IWebDriver driver;
+        private string testString;
         private readonly ScenarioContext _scenarioContext;
 
         public BuyProductSteps(ScenarioContext scenarioContext)
         {
+            // Set our version of the web driver to what was passed via
+            // scenarioContext.
             _scenarioContext = scenarioContext;
             this.driver = (IWebDriver)_scenarioContext["mydriver"];
         }

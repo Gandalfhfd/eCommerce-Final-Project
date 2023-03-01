@@ -15,9 +15,7 @@ namespace FinalProject.POMClasses
 
         public LoginPagePOM(IWebDriver driver)
         {
-            Console.WriteLine("In LoginPagePOM constructor");
             this.driver = driver;
-            Console.WriteLine("Set driver in LoginPagePOM");
         }
 
         // Edgewords Shop-specific setup
