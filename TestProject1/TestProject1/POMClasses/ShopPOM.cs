@@ -18,7 +18,10 @@ namespace FinalProject.POMClasses
 
         public bool AddProductToCart(string productName)
         {
-            TestContext.WriteLine($"Add “{productName}” to your cart");
+            // _productSelectorString is used in the locator to find the add to
+            // cart button for a particular item.
+            _productSelectorString = $"Add “{productName}” to your cart";
+            TestContext.WriteLine(_productSelectorString);
 
             MyHelpers help = new MyHelpers(driver);
             try
