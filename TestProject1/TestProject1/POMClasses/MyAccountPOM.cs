@@ -16,6 +16,7 @@ namespace FinalProject.POMClasses
             string orderNumber = driver.FindElement(lblOrderNumber).Text;
 
             TestContext.WriteLine($"Order number from My account = {orderNumber}");
+            // Return just the order number by removing a #.
             return orderNumber.Substring(1);
         }
     }

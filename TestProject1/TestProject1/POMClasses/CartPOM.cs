@@ -101,7 +101,7 @@ namespace FinalProject.POMClasses
 
             // Check if we can find any of the quantitites
             bool elementPresent;
-            elementPresent = help.IsElementPresent(spnQuantity);
+            elementPresent = help.IsElementPresent(spnQuantity, "spnQuantity");
 
             if (elementPresent == false)
             {

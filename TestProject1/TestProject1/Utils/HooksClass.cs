@@ -23,8 +23,6 @@ namespace FinalProject.Utils
         [Before]
         public void SetUp()
         {   
-            _scenarioContext["testString"] = "Lorem ipsum";
-
             MyHelpers help = new MyHelpers(driver);
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             browser = nonDriverHelp.LoadEnvironmentVariable("browser");

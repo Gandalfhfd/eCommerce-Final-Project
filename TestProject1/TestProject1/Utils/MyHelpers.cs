@@ -89,13 +89,14 @@ namespace FinalProject.Utils
             TestContext.WriteLine("WaitForStaleElement timed out");
             TakeScreensot("Element_Still_Stale");
 
-            // Make sure what this is being passed back to can handle nulls
+            // What this is being passed back should be able to handle nulls.
             return null;
         }
 
         public void WaitForScroll(int timeToWaitInSeconds,
             int pollingTimeInMilliseconds = 500)
         {
+            // Wait for the page to start scrolling.
             int scrollPosition1;
             int scrollPosition2;
 
@@ -119,6 +120,7 @@ namespace FinalProject.Utils
 
         public int GetCurrentScrollPosition()
         {
+            // Find the scroll position.
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             object scrollPosition = executor
                 .ExecuteScript("return window.pageYOffset");
@@ -128,7 +130,7 @@ namespace FinalProject.Utils
             return scrollPositionInt;
         }
 
-        public bool IsElementPresent(By locator)
+        public bool IsElementPresent(By locator, string elementName)
         {
             try
             {
@@ -137,8 +139,7 @@ namespace FinalProject.Utils
             }
             catch (NoSuchElementException)
             {
-                // Not sure how to properly label this screenshot.
-                TakeScreensot("element_not_found");
+                TakeScreensot($"{elementName}_not_found");
                 return false;
             }
         }
@@ -154,7 +155,7 @@ namespace FinalProject.Utils
             ITakesScreenshot ssdriver = driver as ITakesScreenshot;
             Screenshot screenshot = ssdriver.GetScreenshot();
 
-            // Take screenshot. File name needs to be further configured.
+            // Take screenshot.
             screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
 
             TestContext.AddTestAttachment(screenshotPath, screenshotName);

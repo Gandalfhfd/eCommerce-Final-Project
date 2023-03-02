@@ -51,7 +51,7 @@ namespace FinalProject.POMClasses
 
             TestContext.WriteLine("Place order");
 
-            // Just awful design, but stale element exceptions are equally so.
+            // This element often goes stale twice, so the try catch handles that.
             if (orderButton is not null)
             {
                 try
@@ -80,8 +80,7 @@ namespace FinalProject.POMClasses
             help.WaitForElement(lblOrderNumber, 2);
             string orderNumber = driver.FindElement(lblOrderNumber).Text;
 
-            // Cut stuff that isn't the order number off.
-            // This is likely to be brittle.
+            // Extract just the order number.
             orderNumber = orderNumber.Substring(15);
 
             TestContext.WriteLine($"Order number = {orderNumber}");
