@@ -58,6 +58,7 @@ namespace FinalProject.POMClasses
         {
             SiteWidePOM site = new SiteWidePOM(driver);
             site.NavigateUsingNavLink("My account");
+
             TestContext.WriteLine("Logout");
             driver.FindElement(btnLogout).Click();
         }
