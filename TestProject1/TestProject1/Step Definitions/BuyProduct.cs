@@ -70,7 +70,6 @@ namespace FinalProject.Step_Definitions
             }
         }
 
-
         [When(@"I checkout using valid information")]
         public void WhenICheckoutUsingValidInformation()
         {
@@ -87,27 +86,6 @@ namespace FinalProject.Step_Definitions
 
             MyHelpers help = new MyHelpers(driver);
             help.TakeScreensot("checked_out");
-        }
-
-        [Then(@"The order number presented should match the order in my account")]
-        public void ThenTheOrderNumberPresentedShouldMatchTheOrderInMyAccount()
-        {
-            MyHelpers help = new MyHelpers(driver);
-            CheckoutPOM checkout = new CheckoutPOM(driver);
-            SiteWidePOM site = new SiteWidePOM(driver);
-
-            string orderNumber = checkout.GetOrderNumber();
-
-            help.TakeScreensot("Order_received_page");
-
-            site.NavigateUsingNavLink("My account");
-            site.NavigateUsingNavLink("Orders");
-            MyAccountPOM account = new MyAccountPOM(driver);
-            string accountOrderNumber = account.GetRecentOrderNumber();
-
-            Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
-
-            help.TakeScreensot("My_account_Orders_page");
         }
 
         [Then(@"A discount of '(.*)' should be applied")]
@@ -192,6 +170,27 @@ namespace FinalProject.Step_Definitions
             }
 
             help.TakeScreensot("Cart_After_Attempting_Coupon_Application");
+        }
+
+        [Then(@"The order number presented should match the order in my account")]
+        public void ThenTheOrderNumberPresentedShouldMatchTheOrderInMyAccount()
+        {
+            MyHelpers help = new MyHelpers(driver);
+            CheckoutPOM checkout = new CheckoutPOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver);
+
+            string orderNumber = checkout.GetOrderNumber();
+
+            help.TakeScreensot("Order_received_page");
+
+            site.NavigateUsingNavLink("My account");
+            site.NavigateUsingNavLink("Orders");
+            MyAccountPOM account = new MyAccountPOM(driver);
+            string accountOrderNumber = account.GetRecentOrderNumber();
+
+            Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
+
+            help.TakeScreensot("My_account_Orders_page");
         }
     }
 }
