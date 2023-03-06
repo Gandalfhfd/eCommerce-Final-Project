@@ -35,8 +35,8 @@ namespace FinalProject.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Buy a product", "\tIn order to allow the website to make money\r\n\tthe CFO wants users to be able to " +
-                    "buy products", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Buy a product", "\tIn order to be able to aquire the products they want\r\n\tthe customers want to be " +
+                    "able to buy products and use coupon codes", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         

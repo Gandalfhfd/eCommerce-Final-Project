@@ -23,7 +23,6 @@ namespace FinalProject.Step_Definitions
         [Given(@"I am logged in")]
         public void GivenIHaveLoggedIn()
         {
-            MyHelpers help = new MyHelpers(driver);
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             // Load in username and password from external file.
             string username = nonDriverHelp.LoadEnvironmentVariable("username");
@@ -32,6 +31,7 @@ namespace FinalProject.Step_Definitions
             LoginPagePOM login = new LoginPagePOM(driver);
             login.Login(username, password);
 
+            MyHelpers help = new MyHelpers(driver);
             help.TakeScreensot("Logged_In");
         }
 
