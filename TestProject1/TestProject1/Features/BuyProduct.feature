@@ -1,6 +1,6 @@
 Feature: Buy a product
-	In order to allow the website to make money
-	the CFO wants users to be able to buy products
+	In order to be able to aquire the products they want
+	the customers want to be able to buy products and use coupon codes
 
 Background:
 	Given I am logged in
