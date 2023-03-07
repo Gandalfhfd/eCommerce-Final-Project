@@ -59,15 +59,8 @@ namespace FinalProject.Step_Definitions
             CartPOM cart = new CartPOM(driver);
             Console.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
-            help.WaitForElement(By.CssSelector("div[role='alert']"), 2);
 
-            string alertText = driver.FindElement(By.CssSelector("div[role='alert']")).Text;
-
-            if (alertText != "Coupon code applied successfully.")
-            {
-                Console.WriteLine("Coupon may have not been applied successfully.");
-                help.TakeScreensot("coupon_application_failed");
-            }
+            cart.CheckCouponWasAppliedSuccessfully();
         }
 
         [When(@"I checkout using valid information")]

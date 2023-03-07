@@ -16,6 +16,7 @@ namespace FinalProject.POMClasses
         private By lblTotal = By.CssSelector("td[data-title='Total'] > *");
         private By spnQuantity = By.CssSelector("input[type='number']");
         private By btnUpdateCart = By.CssSelector("button[name='update_cart']");
+        private By dlgCouponAlert = By.CssSelector("[role='alert']");
 
         public CartPOM(IWebDriver driver)
         {
@@ -30,6 +31,21 @@ namespace FinalProject.POMClasses
 
             TestContext.WriteLine("Apply coupon");
             driver.FindElement(btnApplyCoupon).Click();
+        }
+
+        public void CheckCouponWasAppliedSuccessfully()
+        {
+            MyHelpers help = new MyHelpers(driver);
+            help.WaitForElement(dlgCouponAlert, 2);
+
+            string alertText = driver.FindElement(dlgCouponAlert).Text;
+
+            if (alertText != "Coupon code applied successfully.")
+            {
+                Console.WriteLine("Coupon may have not been applied successfully.");
+
+                help.TakeScreensot("coupon_application_failed");
+            }
         }
 
         public decimal GetCouponDiscount()
