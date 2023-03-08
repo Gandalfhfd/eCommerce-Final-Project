@@ -1,11 +1,13 @@
 ﻿using FinalProject.Utils;
 using OpenQA.Selenium;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
 {
     internal class LoginPagePOM
     {
         private IWebDriver driver;
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
         private By btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
         private By txtUsername = By.Id("username");
@@ -13,15 +15,16 @@ namespace FinalProject.POMClasses
         private By btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
         private By btnLogout = By.LinkText("Logout");
 
-        public LoginPagePOM(IWebDriver driver)
+        public LoginPagePOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         // Edgewords Shop-specific setup
         public void NavigateToLoginPage()
         {
-            TestContext.WriteLine("Navigate to login page");
+            _specFlowOutputHelper.WriteLine("Navigate to login page");
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
 
             // Dismiss a banner that can get in the way
@@ -31,7 +34,7 @@ namespace FinalProject.POMClasses
             }
             catch (ElementNotInteractableException)
             {
-                TestContext.WriteLine("Banner already dismissed");
+                _specFlowOutputHelper.WriteLine("Banner already dismissed");
             }
         }
 
@@ -40,26 +43,26 @@ namespace FinalProject.POMClasses
             NavigateToLoginPage();
 
             // Let us use the helper library.
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
 
-            TestContext.WriteLine("Log in");
+            _specFlowOutputHelper.WriteLine("Log in");
 
-            TestContext.WriteLine("Input username");
+            _specFlowOutputHelper.WriteLine("Input username");
             help.PutStringInInput(txtUsername, username);
 
-            TestContext.WriteLine("Input password");
+            _specFlowOutputHelper.WriteLine("Input password");
             help.PutStringInInput(txtPassword, password);
 
-            TestContext.WriteLine("Submit login details");
+            _specFlowOutputHelper.WriteLine("Submit login details");
             driver.FindElement(btnLogin).Click();
         }
 
         public void Logout()
         {
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("My account");
 
-            TestContext.WriteLine("Logout");
+            _specFlowOutputHelper.WriteLine("Logout");
             driver.FindElement(btnLogout).Click();
         }
     }

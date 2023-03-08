@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
 {
@@ -6,16 +7,18 @@ namespace FinalProject.POMClasses
     {
         private By lblOrderNumber = By.CssSelector("tr > .woocommerce-orders-table__cell-order-number > a");
         private IWebDriver driver;
-        public MyAccountPOM(IWebDriver driver)
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        public MyAccountPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         public string GetRecentOrderNumber()
         {
             string orderNumber = driver.FindElement(lblOrderNumber).Text;
 
-            TestContext.WriteLine($"Order number from My account = {orderNumber}");
+            _specFlowOutputHelper.WriteLine($"Order number from My account = {orderNumber}");
             // Return just the order number by removing a #.
             return orderNumber.Substring(1);
         }

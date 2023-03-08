@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System.Diagnostics;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.Utils
@@ -9,10 +10,12 @@ namespace FinalProject.Utils
     {
         private IWebDriver driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        private readonly ScenarioContext _scenarioContext;
 
-        public MyHelpers(IWebDriver driver)
+        public MyHelpers(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
         public void PutStringInInput(By locator, string text)
         {
@@ -73,7 +76,7 @@ namespace FinalProject.Utils
 
                     // Getting this far means the element exists and is stable,
                     // so return it.
-                    TestContext.WriteLine("Stopwatch finished at: "
+                    _specFlowOutputHelper.WriteLine("Stopwatch finished at: "
                         + stopWatch.ElapsedMilliseconds.ToString() + "ms");
                     stopWatch.Stop();
 
@@ -81,7 +84,7 @@ namespace FinalProject.Utils
                 }
                 catch (StaleElementReferenceException)
                 {
-                    TestContext.WriteLine("Element not stable - retry wait");
+                    _specFlowOutputHelper.WriteLine("Element not stable - retry wait");
                     Thread.Sleep(timeToWaitBeforeRetryingInMilliseconds);
                 }
             }
@@ -89,7 +92,7 @@ namespace FinalProject.Utils
             // In case it hadn't already stopped.
             stopWatch.Stop();
 
-            TestContext.WriteLine("WaitForStaleElement timed out");
+            _specFlowOutputHelper.WriteLine("WaitForStaleElement timed out");
             TakeScreenshot("Element_Still_Stale");
 
             // What this is being passed back should be able to handle nulls.

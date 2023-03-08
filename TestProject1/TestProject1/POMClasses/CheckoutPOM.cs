@@ -1,6 +1,7 @@
 ﻿using FinalProject.Classes;
 using FinalProject.Utils;
 using OpenQA.Selenium;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
 {
@@ -17,9 +18,11 @@ namespace FinalProject.POMClasses
         private By lblOrderNumber = By.CssSelector("li.order");
 
         private IWebDriver driver;
-        public CheckoutPOM(IWebDriver driver)
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        public CheckoutPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         public void EnterDetails()
@@ -27,9 +30,9 @@ namespace FinalProject.POMClasses
             // Instantiating grabs customer details from runsettings file.
             Customer customer = new Customer();
 
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
 
-            TestContext.WriteLine("Enter customer details");
+            _specFlowOutputHelper.WriteLine("Enter customer details");
 
             help.PutStringInInput(txtFirstName, customer.firstName);
             help.PutStringInInput(txtLastName, customer.lastName);
@@ -44,12 +47,12 @@ namespace FinalProject.POMClasses
 
         public void PlaceOrder()
         {
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             IWebElement? orderButton;
 
             orderButton = help.WaitForStaleElement(btnPlaceOrder, 3000, 500);
 
-            TestContext.WriteLine("Place order");
+            _specFlowOutputHelper.WriteLine("Place order");
 
             // This element often goes stale twice, so the try catch handles that.
             if (orderButton is not null)
@@ -60,14 +63,14 @@ namespace FinalProject.POMClasses
                 }
                 catch (StaleElementReferenceException)
                 {
-                    TestContext.WriteLine("Caught for the second time");
+                    _specFlowOutputHelper.WriteLine("Caught for the second time");
                     orderButton = help.WaitForStaleElement(btnPlaceOrder, 3000, 500);
                     driver.FindElement(btnPlaceOrder).Click();
                 }
             }
             else
             {
-                TestContext.WriteLine("Place order button not available." +
+                _specFlowOutputHelper.WriteLine("Place order button not available." +
                     "Order not placed.");
                 help.TakeScreenshot("could_not_place_order");
             }
@@ -75,7 +78,7 @@ namespace FinalProject.POMClasses
 
         public string GetOrderNumber()
         {
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             // Wait for this element to appear.
             help.WaitForElement(lblOrderNumber, 2);
             string orderNumber = driver.FindElement(lblOrderNumber).Text;
@@ -83,7 +86,7 @@ namespace FinalProject.POMClasses
             // Extract just the order number.
             orderNumber = orderNumber.Substring(15);
 
-            TestContext.WriteLine($"Order number = {orderNumber}");
+            _specFlowOutputHelper.WriteLine($"Order number = {orderNumber}");
             return orderNumber;
         }
     }

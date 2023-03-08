@@ -1,5 +1,6 @@
 ﻿using FinalProject.Utils;
 using OpenQA.Selenium;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
 {
@@ -10,10 +11,11 @@ namespace FinalProject.POMClasses
         private By btnAddToCart => By.CssSelector($"a[aria-label='{_productSelectorString}']");
 
         private IWebDriver driver;
-
-        public ShopPOM(IWebDriver driver)
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        public ShopPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         public bool AddProductToCart(string productName)
@@ -21,16 +23,16 @@ namespace FinalProject.POMClasses
             // _productSelectorString is used in the locator to find the add to
             // cart button for a particular item.
             _productSelectorString = $"Add “{productName}” to your cart";
-            TestContext.WriteLine(_productSelectorString);
+            _specFlowOutputHelper.WriteLine(_productSelectorString);
 
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             try
             {
                 driver.FindElement(btnAddToCart).Click();
             }
             catch (Exception)
             {
-                TestContext.WriteLine($"Could not add {productName} to cart");
+                _specFlowOutputHelper.WriteLine($"Could not add {productName} to cart");
                 help.TakeScreenshot($"Failed_to_add_{productName}_to_cart");
                 return false;
             }

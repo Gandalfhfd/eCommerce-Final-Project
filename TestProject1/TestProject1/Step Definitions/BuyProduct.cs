@@ -2,6 +2,7 @@
 using FinalProject.Utils;
 using OpenQA.Selenium;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.Step_Definitions
 {
@@ -9,6 +10,7 @@ namespace FinalProject.Step_Definitions
     public class BuyProductSteps
     {
         private IWebDriver driver;
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         private readonly ScenarioContext _scenarioContext;
 
         public BuyProductSteps(ScenarioContext scenarioContext)
@@ -17,6 +19,7 @@ namespace FinalProject.Step_Definitions
             // scenarioContext.
             _scenarioContext = scenarioContext;
             this.driver = (IWebDriver)_scenarioContext["mydriver"];
+            _specFlowOutputHelper = (ISpecFlowOutputHelper)_scenarioContext["outputHelper"];
         }
 
         [Given(@"I am logged in")]
@@ -27,36 +30,36 @@ namespace FinalProject.Step_Definitions
             string username = nonDriverHelp.LoadEnvironmentVariable("username");
             string password = nonDriverHelp.LoadEnvironmentVariable("password");
 
-            LoginPagePOM login = new LoginPagePOM(driver);
+            LoginPagePOM login = new LoginPagePOM(driver, _specFlowOutputHelper);
             login.Login(username, password);
 
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.TakeScreenshot("Logged_In");
         }
 
         [When(@"I add '(.*)' to my cart")]
         public void WhenIAddAnItemToMyCart(string productName)
         {
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Shop");
 
-            ShopPOM shop = new ShopPOM(driver);
+            ShopPOM shop = new ShopPOM(driver, _specFlowOutputHelper);
             shop.AddProductToCart(productName);
 
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.TakeScreenshot($"{productName}_added_to_cart");
         }
 
         [When(@"I apply the coupon '(.*)'")]
         public void WhenIApplyAValidCoupon(string coupon)
         {
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
 
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(driver);
-            TestContext.WriteLine($"Coupon = {coupon}");
+            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            _specFlowOutputHelper.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
 
             cart.CheckCouponWasAppliedSuccessfully();
@@ -65,33 +68,33 @@ namespace FinalProject.Step_Definitions
         [When(@"I checkout using valid information")]
         public void WhenICheckoutUsingValidInformation()
         {
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Cart");
 
             // Consider using site.NavigateUsingNavLink here instead.
-            CartPOM cart = new CartPOM(driver);
+            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
             cart.GoToCheckout();
 
-            CheckoutPOM checkout = new CheckoutPOM(driver);
+            CheckoutPOM checkout = new CheckoutPOM(driver, _specFlowOutputHelper);
             checkout.EnterDetails();
             checkout.PlaceOrder();
 
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.TakeScreenshot("checked_out");
         }
 
         [Then(@"A discount of '(.*)' should be applied")]
         public void ThenTheAppropriateDiscountShouldBeApplied(string strPercentage)
         {
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             decimal desiredDiscountPercent = nonDriverHelp.ConvertStringPercentToDecimal(strPercentage);
 
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
 
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(driver);
+            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
 
             decimal discount = cart.GetCouponDiscount();
 
@@ -115,13 +118,13 @@ namespace FinalProject.Step_Definitions
             }
             catch (AssertionException)
             {
-                TestContext.WriteLine($"Discount percentage is not " +
+                _specFlowOutputHelper.WriteLine($"Discount percentage is not " +
                     $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
             }
 
             if (discount == desiredDiscount)
             {
-                TestContext.WriteLine("Desired discount matches actual discount");
+                _specFlowOutputHelper.WriteLine("Desired discount matches actual discount");
             }
 
             decimal shipping = cart.GetShipping();
@@ -142,23 +145,23 @@ namespace FinalProject.Step_Definitions
             }
             catch (AssertionException)
             {
-                TestContext.WriteLine($"Total is £{total}." +
+                _specFlowOutputHelper.WriteLine($"Total is £{total}." +
                     $"It should be £{theoreticalTotalActualDiscount}");
             }
 
             if (total == theoreticalTotalActualDiscount)
             {
-                TestContext.WriteLine("Total matches expected");
+                _specFlowOutputHelper.WriteLine("Total matches expected");
             }
             else if (total == theoreticalTotalDesiredDiscount)
             {
-                TestContext.WriteLine("Total does not match expected, but it was" +
+                _specFlowOutputHelper.WriteLine("Total does not match expected, but it was" +
                     " calculated correctly from the subtotal, discount, and " +
                     "shipping displayed on the page.");
             }
             else
             {
-                TestContext.WriteLine("Total was calculated incorrectly");
+                _specFlowOutputHelper.WriteLine("Total was calculated incorrectly");
             }
 
             help.TakeScreenshot("Cart_After_Attempting_Coupon_Application");
@@ -167,9 +170,9 @@ namespace FinalProject.Step_Definitions
         [Then(@"The order number presented should match the order in my account")]
         public void ThenTheOrderNumberPresentedShouldMatchTheOrderInMyAccount()
         {
-            MyHelpers help = new MyHelpers(driver);
-            CheckoutPOM checkout = new CheckoutPOM(driver);
-            SiteWidePOM site = new SiteWidePOM(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            CheckoutPOM checkout = new CheckoutPOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
 
             string orderNumber = checkout.GetOrderNumber();
 
@@ -177,7 +180,7 @@ namespace FinalProject.Step_Definitions
 
             site.NavigateUsingNavLink("My account");
             site.NavigateUsingNavLink("Orders");
-            MyAccountPOM account = new MyAccountPOM(driver);
+            MyAccountPOM account = new MyAccountPOM(driver, _specFlowOutputHelper);
             string accountOrderNumber = account.GetRecentOrderNumber();
 
             Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));

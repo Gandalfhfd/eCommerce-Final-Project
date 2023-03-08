@@ -1,11 +1,13 @@
 ﻿using FinalProject.Utils;
 using OpenQA.Selenium;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
 {
     internal class CartPOM
     {
         private IWebDriver driver;
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
         private By lblCoupon = By.Id("coupon_code");
         private By btnApplyCoupon = By.CssSelector("button[value='Apply coupon']");
@@ -18,31 +20,32 @@ namespace FinalProject.POMClasses
         private By btnUpdateCart = By.CssSelector("button[name='update_cart']");
         private By dlgCouponAlert = By.CssSelector("[role='alert']");
 
-        public CartPOM(IWebDriver driver)
+        public CartPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.driver = driver;
+            _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         public void ApplyCoupon(string coupon)
         {
-            TestContext.WriteLine("Enter coupon");
-            MyHelpers help = new MyHelpers(driver);
+            _specFlowOutputHelper.WriteLine("Enter coupon");
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.PutStringInInput(lblCoupon, coupon);
 
-            TestContext.WriteLine("Apply coupon");
+            _specFlowOutputHelper.WriteLine("Apply coupon");
             driver.FindElement(btnApplyCoupon).Click();
         }
 
         public void CheckCouponWasAppliedSuccessfully()
         {
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.WaitForElement(dlgCouponAlert, 2);
 
             string alertText = driver.FindElement(dlgCouponAlert).Text;
 
             if (alertText != "Coupon code applied successfully.")
             {
-                TestContext.WriteLine("Coupon may have not been applied successfully.");
+                _specFlowOutputHelper.WriteLine("Coupon may have not been applied successfully.");
 
                 help.TakeScreenshot("coupon_application_failed");
             }
@@ -53,13 +56,13 @@ namespace FinalProject.POMClasses
             string discountAmount = "";
 
             // Wait for discount to be calculated
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
             help.WaitForElement(lblDiscount, 2);
 
             // Find discount amount in format <£a.b>.
             discountAmount = driver.FindElement(lblDiscount).Text;
 
-            TestContext.WriteLine($"{discountAmount} of discount was applied");
+            _specFlowOutputHelper.WriteLine($"{discountAmount} of discount was applied");
             // Remove currency symbol from discountAmount by removing first char.
             discountAmount = discountAmount.Substring(1);
 
@@ -73,7 +76,7 @@ namespace FinalProject.POMClasses
             // Find subtotal in format <£a.b>.
             subtotal = driver.FindElement(lblSubtotal).Text;
 
-            TestContext.WriteLine($"Subtotal = {subtotal}");
+            _specFlowOutputHelper.WriteLine($"Subtotal = {subtotal}");
             // Remove currency symbol from subtotal by removing first char.
             subtotal = subtotal.Substring(1);
             return Convert.ToDecimal(subtotal);
@@ -86,7 +89,7 @@ namespace FinalProject.POMClasses
             // Find shipping.
             shipping = driver.FindElement(lblShipping).Text;
 
-            TestContext.WriteLine($"Shipping = {shipping.Substring(11)}");
+            _specFlowOutputHelper.WriteLine($"Shipping = {shipping.Substring(11)}");
 
             // Grab the number from the shipping string
             shipping = shipping.Substring(12);
@@ -101,7 +104,7 @@ namespace FinalProject.POMClasses
             // Find total
             total = driver.FindElement(lblTotal).Text;
 
-            TestContext.WriteLine($"Total = {total}");
+            _specFlowOutputHelper.WriteLine($"Total = {total}");
 
             // Remove currency symbol from total by removing first char.
             total = total.Substring(1);
@@ -111,9 +114,9 @@ namespace FinalProject.POMClasses
         public void RemoveItemsFromCart()
         {
             driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
-            MyHelpers help = new MyHelpers(driver);
+            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
 
-            TestContext.WriteLine("Attempt to remove all items from cart");
+            _specFlowOutputHelper.WriteLine("Attempt to remove all items from cart");
 
             // Check if we can find any of the quantitites
             bool elementPresent;
@@ -121,7 +124,7 @@ namespace FinalProject.POMClasses
 
             if (elementPresent == false)
             {
-                TestContext.WriteLine("No items in cart");
+                _specFlowOutputHelper.WriteLine("No items in cart");
                 return;
             }
 
@@ -139,7 +142,7 @@ namespace FinalProject.POMClasses
 
         public void GoToCheckout()
         {
-            SiteWidePOM site = new SiteWidePOM(driver);
+            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Proceed to checkout");
         }
     }
