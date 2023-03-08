@@ -1,12 +1,15 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System.Diagnostics;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.Utils
 {
     internal class MyHelpers
     {
         private IWebDriver driver;
+        private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+
         public MyHelpers(IWebDriver driver)
         {
             this.driver = driver;
@@ -87,7 +90,7 @@ namespace FinalProject.Utils
             stopWatch.Stop();
 
             TestContext.WriteLine("WaitForStaleElement timed out");
-            TakeScreensot("Element_Still_Stale");
+            TakeScreenshot("Element_Still_Stale");
 
             // What this is being passed back should be able to handle nulls.
             return null;
@@ -139,12 +142,12 @@ namespace FinalProject.Utils
             }
             catch (NoSuchElementException)
             {
-                TakeScreensot($"{elementName}_not_found");
+                TakeScreenshot($"{elementName}_not_found");
                 return false;
             }
         }
 
-        public void TakeScreensot(string screenshotName)
+        public void TakeScreenshot(string screenshotName)
         {
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             string screenshotDirectory = nonDriverHelp.LoadEnvironmentVariable("screenshotPath");
@@ -158,6 +161,8 @@ namespace FinalProject.Utils
             // Take screenshot.
             screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
 
+            // Save to specflow livingdoc
+            _specFlowOutputHelper.AddAttachment(screenshotPath);
             TestContext.AddTestAttachment(screenshotPath, screenshotName);
         }
     }

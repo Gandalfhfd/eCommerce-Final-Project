@@ -9,7 +9,6 @@ namespace FinalProject.Step_Definitions
     public class BuyProductSteps
     {
         private IWebDriver driver;
-        private string testString;
         private readonly ScenarioContext _scenarioContext;
 
         public BuyProductSteps(ScenarioContext scenarioContext)
@@ -32,7 +31,7 @@ namespace FinalProject.Step_Definitions
             login.Login(username, password);
 
             MyHelpers help = new MyHelpers(driver);
-            help.TakeScreensot("Logged_In");
+            help.TakeScreenshot("Logged_In");
         }
 
         [When(@"I add '(.*)' to my cart")]
@@ -45,7 +44,7 @@ namespace FinalProject.Step_Definitions
             shop.AddProductToCart(productName);
 
             MyHelpers help = new MyHelpers(driver);
-            help.TakeScreensot($"{productName}_added_to_cart");
+            help.TakeScreenshot($"{productName}_added_to_cart");
         }
 
         [When(@"I apply the coupon '(.*)'")]
@@ -57,7 +56,7 @@ namespace FinalProject.Step_Definitions
             site.NavigateUsingNavLink("Cart");
 
             CartPOM cart = new CartPOM(driver);
-            Console.WriteLine($"Coupon = {coupon}");
+            TestContext.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
 
             cart.CheckCouponWasAppliedSuccessfully();
@@ -78,7 +77,7 @@ namespace FinalProject.Step_Definitions
             checkout.PlaceOrder();
 
             MyHelpers help = new MyHelpers(driver);
-            help.TakeScreensot("checked_out");
+            help.TakeScreenshot("checked_out");
         }
 
         [Then(@"A discount of '(.*)' should be applied")]
@@ -122,7 +121,7 @@ namespace FinalProject.Step_Definitions
 
             if (discount == desiredDiscount)
             {
-                Console.WriteLine("Desired discount matches actual discount");
+                TestContext.WriteLine("Desired discount matches actual discount");
             }
 
             decimal shipping = cart.GetShipping();
@@ -149,20 +148,20 @@ namespace FinalProject.Step_Definitions
 
             if (total == theoreticalTotalActualDiscount)
             {
-                Console.WriteLine("Total matches expected");
+                TestContext.WriteLine("Total matches expected");
             }
             else if (total == theoreticalTotalDesiredDiscount)
             {
-                Console.WriteLine("Total does not match expected, but it was" +
+                TestContext.WriteLine("Total does not match expected, but it was" +
                     " calculated correctly from the subtotal, discount, and " +
                     "shipping displayed on the page.");
             }
             else
             {
-                Console.WriteLine("Total was calculated incorrectly");
+                TestContext.WriteLine("Total was calculated incorrectly");
             }
 
-            help.TakeScreensot("Cart_After_Attempting_Coupon_Application");
+            help.TakeScreenshot("Cart_After_Attempting_Coupon_Application");
         }
 
         [Then(@"The order number presented should match the order in my account")]
@@ -174,7 +173,7 @@ namespace FinalProject.Step_Definitions
 
             string orderNumber = checkout.GetOrderNumber();
 
-            help.TakeScreensot("Order_received_page");
+            help.TakeScreenshot("Order_received_page");
 
             site.NavigateUsingNavLink("My account");
             site.NavigateUsingNavLink("Orders");
@@ -183,7 +182,7 @@ namespace FinalProject.Step_Definitions
 
             Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));
 
-            help.TakeScreensot("My_account_Orders_page");
+            help.TakeScreenshot("My_account_Orders_page");
         }
     }
 }

@@ -42,9 +42,9 @@ namespace FinalProject.POMClasses
 
             if (alertText != "Coupon code applied successfully.")
             {
-                Console.WriteLine("Coupon may have not been applied successfully.");
+                TestContext.WriteLine("Coupon may have not been applied successfully.");
 
-                help.TakeScreensot("coupon_application_failed");
+                help.TakeScreenshot("coupon_application_failed");
             }
         }
 

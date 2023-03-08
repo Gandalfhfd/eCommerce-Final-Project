@@ -31,7 +31,7 @@ namespace FinalProject.POMClasses
             catch (Exception)
             {
                 TestContext.WriteLine($"Could not add {productName} to cart");
-                help.TakeScreensot($"Failed_to_add_{productName}_to_cart");
+                help.TakeScreenshot($"Failed_to_add_{productName}_to_cart");
                 return false;
             }
 

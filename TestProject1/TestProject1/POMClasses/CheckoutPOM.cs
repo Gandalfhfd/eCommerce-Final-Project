@@ -39,7 +39,7 @@ namespace FinalProject.POMClasses
             help.PutStringInInput(txtPhoneNumber, customer.phoneNumber);
             help.PutStringInInput(txtEmail, customer.emailAddress);
 
-            help.TakeScreensot("entered_customer_details");
+            help.TakeScreenshot("entered_customer_details");
         }
 
         public void PlaceOrder()
@@ -69,7 +69,7 @@ namespace FinalProject.POMClasses
             {
                 TestContext.WriteLine("Place order button not available." +
                     "Order not placed.");
-                help.TakeScreensot("could_not_place_order");
+                help.TakeScreenshot("could_not_place_order");
             }
         }
 
