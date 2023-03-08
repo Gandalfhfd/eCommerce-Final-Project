@@ -63,6 +63,7 @@ namespace FinalProject.Step_Definitions
             cart.ApplyCoupon(coupon);
 
             cart.CheckCouponWasAppliedSuccessfully();
+            help.TakeScreenshot("Cart_After_Attempting_Coupon_Application");
         }
 
         [When(@"I checkout using valid information")]
@@ -103,24 +104,15 @@ namespace FinalProject.Step_Definitions
 
             decimal discountPercent = discount / subtotal;
 
-            //decimal desiredDiscountPercent = Convert.ToDecimal(
-            //    help.LoadParameterFromRunsettings("discountPercentage"));
-
             // Find absolute desired discount. Must be rounded to 2 d.p.
             decimal desiredDiscount = desiredDiscountPercent * subtotal;
             // Round to 2 d.p. since this is a price.
             desiredDiscount = Math.Round(desiredDiscount, 2);
 
             // Compare actual discount to desired discount.
-            try
-            {
-                Assert.That(discount, Is.EqualTo(desiredDiscount));
-            }
-            catch (AssertionException)
-            {
-                _specFlowOutputHelper.WriteLine($"Discount percentage is not " +
-                    $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
-            }
+            Assert.That(discountPercent, Is.EqualTo(desiredDiscountPercent),
+                $"Discount percentage is not " +
+                $"{desiredDiscountPercent:P2}, it is {discountPercent:P2}.");
 
             if (discount == desiredDiscount)
             {
@@ -139,24 +131,18 @@ namespace FinalProject.Step_Definitions
             // Get total as displayed on webpage.
             decimal total = cart.GetTotal();
 
-            try
-            {
-                Assert.That(total, Is.EqualTo(theoreticalTotalActualDiscount));
-            }
-            catch (AssertionException)
-            {
-                _specFlowOutputHelper.WriteLine($"Total is £{total}." +
-                    $"It should be £{theoreticalTotalActualDiscount}");
-            }
-
             if (total == theoreticalTotalActualDiscount)
             {
-                _specFlowOutputHelper.WriteLine("Total matches expected");
+                _specFlowOutputHelper.WriteLine("Total matches expected" +
+                    "based on subtotal, discount, and shipping displayed on" +
+                    "the page.");
             }
             else if (total == theoreticalTotalDesiredDiscount)
             {
-                _specFlowOutputHelper.WriteLine("Total does not match expected, but it was" +
-                    " calculated correctly from the subtotal, discount, and " +
+                _specFlowOutputHelper.WriteLine("Total does not match " +
+                    "expected based on values displayed on the page. It" +
+                    "does match the total calculated from the desired" +
+                    "discount subtracted from the subtotal and" +
                     "shipping displayed on the page.");
             }
             else
@@ -164,7 +150,15 @@ namespace FinalProject.Step_Definitions
                 _specFlowOutputHelper.WriteLine("Total was calculated incorrectly");
             }
 
-            help.TakeScreenshot("Cart_After_Attempting_Coupon_Application");
+            Assert.That(total, Is.EqualTo(theoreticalTotalActualDiscount),
+                $"Total is £{total}." +
+                $"It should be £{theoreticalTotalActualDiscount}." +
+                $"See earlier test output for more details.");
+
+            Assert.That(total, Is.EqualTo(theoreticalTotalDesiredDiscount),
+                $"Total is £{total}." +
+                $"It should be £{theoreticalTotalDesiredDiscount}." +
+                $"See earlier test output for more details.");
         }
 
         [Then(@"The order number presented should match the order in my account")]

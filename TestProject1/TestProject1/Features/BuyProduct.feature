@@ -5,10 +5,15 @@ Feature: Buy a product
 Background:
 	Given I am logged in
 
-Scenario: Apply a coupon to a product
-	When I add 'Belt' to my cart
+Scenario Outline: Apply a coupon to a product
+	When I add '<product>' to my cart
 	And I apply the coupon 'edgewords'
-	Then A discount of '10%' should be applied
+	Then A discount of '15%' should be applied
+
+Examples:
+	| product |
+	| Belt    |
+	#| Polo    |
 
 Scenario Outline: Buy a product
 	When I add '<product>' to my cart
@@ -18,8 +23,4 @@ Scenario Outline: Buy a product
 Examples:
 	| product |
 	| Belt    |
-
-#Scenario: Buy a product
-#	When I add 'Belts' to my cart
-#	And I checkout using valid information
-#	Then The order number presented should match the order in my account
+	#| Polo    |
