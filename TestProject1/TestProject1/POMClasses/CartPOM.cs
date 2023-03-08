@@ -6,42 +6,42 @@ namespace FinalProject.POMClasses
 {
     internal class CartPOM
     {
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
-        private By lblCoupon = By.Id("coupon_code");
-        private By btnApplyCoupon = By.CssSelector("button[value='Apply coupon']");
-        private By lblDiscount = By.CssSelector("td[data-title*='Coupon:'] " +
+        private readonly By _lblCoupon = By.Id("coupon_code");
+        private readonly By _btnApplyCoupon = By.CssSelector("button[value='Apply coupon']");
+        private readonly By _lblDiscount = By.CssSelector("td[data-title*='Coupon:'] " +
             "> span.woocommerce-Price-amount");
-        private By lblSubtotal = By.CssSelector("tr.cart-subtotal > * > *");
-        private By lblShipping = By.CssSelector("td[data-title='Shipping'] > * > *");
-        private By lblTotal = By.CssSelector("td[data-title='Total'] > *");
-        private By spnQuantity = By.CssSelector("input[type='number']");
-        private By btnUpdateCart = By.CssSelector("button[name='update_cart']");
-        private By dlgCouponAlert = By.CssSelector("[role='alert']");
+        private readonly By _lblSubtotal = By.CssSelector("tr.cart-subtotal > * > *");
+        private readonly By _lblShipping = By.CssSelector("td[data-title='Shipping'] > * > *");
+        private readonly By _lblTotal = By.CssSelector("td[data-title='Total'] > *");
+        private readonly By _spnQuantity = By.CssSelector("input[type='number']");
+        private readonly By _btnUpdateCart = By.CssSelector("button[name='update_cart']");
+        private readonly By _dlgCouponAlert = By.CssSelector("[role='alert']");
 
         public CartPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
-            this.driver = driver;
+            _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
         }
 
         public void ApplyCoupon(string coupon)
         {
             _specFlowOutputHelper.WriteLine("Enter coupon");
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
-            help.PutStringInInput(lblCoupon, coupon);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
+            help.PutStringInInput(_lblCoupon, coupon);
 
             _specFlowOutputHelper.WriteLine("Apply coupon");
-            driver.FindElement(btnApplyCoupon).Click();
+            _driver.FindElement(_btnApplyCoupon).Click();
         }
 
         public void CheckCouponWasAppliedSuccessfully()
         {
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
-            help.WaitForElement(dlgCouponAlert, 2);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
+            help.WaitForElement(_dlgCouponAlert, 2);
 
-            string alertText = driver.FindElement(dlgCouponAlert).Text;
+            string alertText = _driver.FindElement(_dlgCouponAlert).Text;
 
             if (alertText != "Coupon code applied successfully.")
             {
@@ -53,14 +53,14 @@ namespace FinalProject.POMClasses
 
         public decimal GetCouponDiscount()
         {
-            string discountAmount = "";
+            string discountAmount;
 
             // Wait for discount to be calculated
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
-            help.WaitForElement(lblDiscount, 2);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
+            help.WaitForElement(_lblDiscount, 2);
 
             // Find discount amount in format <£a.b>.
-            discountAmount = driver.FindElement(lblDiscount).Text;
+            discountAmount = _driver.FindElement(_lblDiscount).Text;
 
             _specFlowOutputHelper.WriteLine($"{discountAmount} of discount was applied");
             // Remove currency symbol from discountAmount by removing first char.
@@ -71,10 +71,10 @@ namespace FinalProject.POMClasses
 
         public decimal GetSubtotal()
         {
-            string subtotal = "";
+            string subtotal;
 
             // Find subtotal in format <£a.b>.
-            subtotal = driver.FindElement(lblSubtotal).Text;
+            subtotal = _driver.FindElement(_lblSubtotal).Text;
 
             _specFlowOutputHelper.WriteLine($"Subtotal = {subtotal}");
             // Remove currency symbol from subtotal by removing first char.
@@ -84,10 +84,10 @@ namespace FinalProject.POMClasses
 
         public decimal GetShipping()
         {
-            string shipping = "";
+            string shipping;
 
             // Find shipping.
-            shipping = driver.FindElement(lblShipping).Text;
+            shipping = _driver.FindElement(_lblShipping).Text;
 
             _specFlowOutputHelper.WriteLine($"Shipping = {shipping.Substring(11)}");
 
@@ -99,10 +99,10 @@ namespace FinalProject.POMClasses
 
         public decimal GetTotal()
         {
-            string total = "";
+            string total;
 
             // Find total
-            total = driver.FindElement(lblTotal).Text;
+            total = _driver.FindElement(_lblTotal).Text;
 
             _specFlowOutputHelper.WriteLine($"Total = {total}");
 
@@ -113,14 +113,14 @@ namespace FinalProject.POMClasses
 
         public void RemoveItemsFromCart()
         {
-            driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            _driver.Url = "https://www.edgewordstraining.co.uk/demo-site/cart/";
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
 
             _specFlowOutputHelper.WriteLine("Attempt to remove all items from cart");
 
             // Check if we can find any of the quantitites
             bool elementPresent;
-            elementPresent = help.IsElementPresent(spnQuantity, "spnQuantity");
+            elementPresent = help.IsElementPresent(_spnQuantity, "spnQuantity");
 
             if (elementPresent == false)
             {
@@ -129,20 +129,20 @@ namespace FinalProject.POMClasses
             }
 
             // Find a list of all of the quantities to loop through later.
-            IReadOnlyList<IWebElement> quantities = driver.FindElements
-                (spnQuantity);
+            IReadOnlyList<IWebElement> quantities = _driver.FindElements
+                (_spnQuantity);
 
             foreach (IWebElement element in quantities)
             {
-                help.PutStringInInput(element, "0");
+                MyHelpers.PutStringInInput(element, "0");
             }
 
-            driver.FindElement(btnUpdateCart).Click();
+            _driver.FindElement(_btnUpdateCart).Click();
         }
 
         public void GoToCheckout()
         {
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Proceed to checkout");
         }
     }

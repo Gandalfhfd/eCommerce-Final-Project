@@ -8,7 +8,7 @@ namespace FinalProject.Utils
 {
     internal class NonDriverHelpers
     {
-        public string LoadParameterFromRunsettings(string parameterName)
+        public static string LoadParameterFromRunsettings(string parameterName)
         {
             string? output = TestContext.Parameters[parameterName];
             if (output is null)
@@ -19,7 +19,7 @@ namespace FinalProject.Utils
             return output;
         }
 
-        public string LoadEnvironmentVariable(string variableName)
+        public static string LoadEnvironmentVariable(string variableName)
         {
             string? output = Environment.GetEnvironmentVariable(variableName);
             if (output is null)
@@ -30,7 +30,7 @@ namespace FinalProject.Utils
             return output;
         }
 
-        public int FindMaxIterations(int timeToWaitInSeconds,
+        public static int FindMaxIterations(int timeToWaitInSeconds,
             int iterationLengthInMilliseconds)
         {
             // Calculate maximum number of iterations as a non-whole number.
@@ -42,7 +42,7 @@ namespace FinalProject.Utils
             return maxIter;
         }
 
-        public string DateTimeNow()
+        public static string DateTimeNow()
         // Provide date and time in ISO 8601 format.
         {
             DateTime date = DateTime.Now;
@@ -51,7 +51,7 @@ namespace FinalProject.Utils
             return output;
         }
 
-        public decimal ConvertStringPercentToDecimal(string percentageString)
+        public static decimal ConvertStringPercentToDecimal(string percentageString)
         {
             // Convert a string in the format xx% to 0.xx.
             // For example, 15% becomes 0.15.
@@ -67,7 +67,7 @@ namespace FinalProject.Utils
             return output;
         }
 
-        public string Truncate(string text, int numCharsToBeTruncated)
+        public static string Truncate(string text, int numCharsToBeTruncated)
         {
             return text.Substring(0, text.Length - numCharsToBeTruncated);
         }

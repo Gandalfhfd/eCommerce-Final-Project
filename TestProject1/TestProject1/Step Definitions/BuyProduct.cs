@@ -9,7 +9,7 @@ namespace FinalProject.Step_Definitions
     [Binding]
     public class BuyProductSteps
     {
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         private readonly ScenarioContext _scenarioContext;
 
@@ -18,47 +18,46 @@ namespace FinalProject.Step_Definitions
             // Set our version of the web driver to what was passed via
             // scenarioContext.
             _scenarioContext = scenarioContext;
-            this.driver = (IWebDriver)_scenarioContext["mydriver"];
+            _driver = (IWebDriver)_scenarioContext["mydriver"];
             _specFlowOutputHelper = (ISpecFlowOutputHelper)_scenarioContext["outputHelper"];
         }
 
         [Given(@"I am logged in")]
         public void GivenIHaveLoggedIn()
         {
-            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             // Load in username and password from external file.
-            string username = nonDriverHelp.LoadEnvironmentVariable("username");
-            string password = nonDriverHelp.LoadEnvironmentVariable("password");
+            string username = NonDriverHelpers.LoadEnvironmentVariable("username");
+            string password = NonDriverHelpers.LoadEnvironmentVariable("password");
 
-            LoginPagePOM login = new LoginPagePOM(driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
             login.Login(username, password);
 
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
             help.TakeScreenshot("Logged_In");
         }
 
         [When(@"I add '(.*)' to my cart")]
         public void WhenIAddAnItemToMyCart(string productName)
         {
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Shop");
 
-            ShopPOM shop = new ShopPOM(driver, _specFlowOutputHelper);
+            ShopPOM shop = new ShopPOM(_driver, _specFlowOutputHelper);
             shop.AddProductToCart(productName);
 
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
             help.TakeScreenshot($"{productName}_added_to_cart");
         }
 
         [When(@"I apply the coupon '(.*)'")]
         public void WhenIApplyAValidCoupon(string coupon)
         {
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
 
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
             _specFlowOutputHelper.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
 
@@ -69,33 +68,31 @@ namespace FinalProject.Step_Definitions
         [When(@"I checkout using valid information")]
         public void WhenICheckoutUsingValidInformation()
         {
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Cart");
 
             // Consider using site.NavigateUsingNavLink here instead.
-            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
             cart.GoToCheckout();
 
-            CheckoutPOM checkout = new CheckoutPOM(driver, _specFlowOutputHelper);
+            CheckoutPOM checkout = new CheckoutPOM(_driver, _specFlowOutputHelper);
             checkout.EnterDetails();
             checkout.PlaceOrder();
 
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
             help.TakeScreenshot("checked_out");
         }
 
         [Then(@"A discount of '(.*)' should be applied")]
         public void ThenTheAppropriateDiscountShouldBeApplied(string strPercentage)
         {
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
-            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
-            decimal desiredDiscountPercent = nonDriverHelp.ConvertStringPercentToDecimal(strPercentage);
+            decimal desiredDiscountPercent = NonDriverHelpers.ConvertStringPercentToDecimal(strPercentage);
 
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
 
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
 
             decimal discount = cart.GetCouponDiscount();
 
@@ -164,9 +161,9 @@ namespace FinalProject.Step_Definitions
         [Then(@"The order number presented should match the order in my account")]
         public void ThenTheOrderNumberPresentedShouldMatchTheOrderInMyAccount()
         {
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
-            CheckoutPOM checkout = new CheckoutPOM(driver, _specFlowOutputHelper);
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
+            CheckoutPOM checkout = new CheckoutPOM(_driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
 
             string orderNumber = checkout.GetOrderNumber();
 
@@ -174,7 +171,7 @@ namespace FinalProject.Step_Definitions
 
             site.NavigateUsingNavLink("My account");
             site.NavigateUsingNavLink("Orders");
-            MyAccountPOM account = new MyAccountPOM(driver, _specFlowOutputHelper);
+            MyAccountPOM account = new MyAccountPOM(_driver, _specFlowOutputHelper);
             string accountOrderNumber = account.GetRecentOrderNumber();
 
             Assert.That(orderNumber, Is.EqualTo(accountOrderNumber));

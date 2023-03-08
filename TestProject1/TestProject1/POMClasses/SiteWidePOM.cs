@@ -5,7 +5,7 @@ namespace FinalProject.POMClasses
 {
     internal class SiteWidePOM
     {
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
         private string _linkText;
@@ -13,7 +13,7 @@ namespace FinalProject.POMClasses
 
         public SiteWidePOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
-            this.driver = driver;
+            _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
         }
 
@@ -21,7 +21,7 @@ namespace FinalProject.POMClasses
         {
             _linkText = linkText;
             _specFlowOutputHelper.WriteLine($"Click on \"{linkText}\" link");
-            driver.FindElement(lnkLink).Click();
+            _driver.FindElement(lnkLink).Click();
         }
     }
 }

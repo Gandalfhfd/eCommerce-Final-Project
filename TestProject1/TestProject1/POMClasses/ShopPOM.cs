@@ -6,15 +6,15 @@ namespace FinalProject.POMClasses
 {
     internal class ShopPOM
     {
-        private By btnViewCart = By.CssSelector("a.added_to_cart");
+        private readonly By _btnViewCart = By.CssSelector("a.added_to_cart");
         private string _productSelectorString;
-        private By btnAddToCart => By.CssSelector($"a[aria-label='{_productSelectorString}']");
+        private By _btnAddToCart => By.CssSelector($"a[aria-label='{_productSelectorString}']");
 
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         public ShopPOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
-            this.driver = driver;
+            _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
         }
 
@@ -25,10 +25,10 @@ namespace FinalProject.POMClasses
             _productSelectorString = $"Add “{productName}” to your cart";
             _specFlowOutputHelper.WriteLine(_productSelectorString);
 
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
             try
             {
-                driver.FindElement(btnAddToCart).Click();
+                _driver.FindElement(_btnAddToCart).Click();
             }
             catch (Exception)
             {
@@ -38,7 +38,7 @@ namespace FinalProject.POMClasses
             }
 
             // Wait for product to be added to basket before moving on.
-            help.WaitForElement(btnAddToCart, 6);
+            help.WaitForElement(_btnViewCart, 6);
 
             return true;
         }

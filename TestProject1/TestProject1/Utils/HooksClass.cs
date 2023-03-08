@@ -10,12 +10,12 @@ namespace FinalProject.Utils
     [Binding]
     internal class HooksClass
     {
-        public static IWebDriver? driver;
+        public static IWebDriver? _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         private readonly ScenarioContext _scenarioContext;
 
-        protected string baseUrl = "baseUrl not found";
-        protected string browser = "browser not found";
+        protected string _baseUrl = "baseUrl not found";
+        protected string _browser = "browser not found";
 
         public HooksClass(ScenarioContext scenarioContext,
             ISpecFlowOutputHelper specFlowOutputHelper)
@@ -26,43 +26,42 @@ namespace FinalProject.Utils
 
         [Before]
         public void SetUp()
-        {   
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+        {
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
-            browser = nonDriverHelp.LoadEnvironmentVariable("browser");
-            baseUrl = nonDriverHelp.LoadEnvironmentVariable("baseUrl");
+            _browser = NonDriverHelpers.LoadEnvironmentVariable("browser");
+            _baseUrl = NonDriverHelpers.LoadEnvironmentVariable("baseUrl");
 
-            _specFlowOutputHelper.WriteLine($"Read in browser var from runsettings: {browser}");
-            browser = browser.ToLower().Trim();
+            _specFlowOutputHelper.WriteLine($"Read in browser var from runsettings: {_browser}");
+            _browser = _browser.ToLower().Trim();
 
-            switch (browser)
+            switch (_browser)
             {
                 case "firefox":
-                    driver = new FirefoxDriver(); break;
+                    _driver = new FirefoxDriver(); break;
                 case "chrome":
-                    driver = new ChromeDriver(); break;
+                    _driver = new ChromeDriver(); break;
                 default:
                     _specFlowOutputHelper.WriteLine("Unknown browser - starting chrome");
-                    driver = new ChromeDriver();
+                    _driver = new ChromeDriver();
                     break;
             }
 
             // Share the driver with anyone who wants it.
-            _scenarioContext["mydriver"] = driver;
+            _scenarioContext["mydriver"] = _driver;
             // Share the specFlowOutputHelper with anyone who wants it.
             _scenarioContext["outputHelper"] = _specFlowOutputHelper;
 
             // Load in username and password from external file.
             NonDriverHelpers nonDriverHelpers = new NonDriverHelpers();
-            string username = nonDriverHelpers.LoadEnvironmentVariable("username");
-            string password = nonDriverHelpers.LoadEnvironmentVariable("password");
+            string username = NonDriverHelpers.LoadEnvironmentVariable("username");
+            string password = NonDriverHelpers.LoadEnvironmentVariable("password");
 
             // Log in so that we can view the cart.
-            LoginPagePOM login = new LoginPagePOM(driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
             login.Login(username, password);
 
             // Prepare the test by removing all items from the cart
-            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
             cart.RemoveItemsFromCart();
 
             login.Logout();
@@ -75,7 +74,7 @@ namespace FinalProject.Utils
         {
             _specFlowOutputHelper.WriteLine("Test end");
 
-            CartPOM cart = new CartPOM(driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
             // Try catch ensures driver.Quit() is called.
             try
             {
@@ -86,7 +85,7 @@ namespace FinalProject.Utils
                 _specFlowOutputHelper.WriteLine("Could not remove items from cart");
             }
 
-            LoginPagePOM login = new LoginPagePOM(driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
             // Try catch ensures driver.Quit() is called.
             try
             {
@@ -98,7 +97,7 @@ namespace FinalProject.Utils
                 _specFlowOutputHelper.WriteLine("Could not log out");
             }
 
-            driver.Quit();
+            _driver.Quit();
         }
     }
 }

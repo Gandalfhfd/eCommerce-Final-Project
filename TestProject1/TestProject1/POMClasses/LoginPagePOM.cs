@@ -6,18 +6,18 @@ namespace FinalProject.POMClasses
 {
     internal class LoginPagePOM
     {
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
-        private By btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
-        private By txtUsername = By.Id("username");
-        private By txtPassword = By.Id("password");
-        private By btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
-        private By btnLogout = By.LinkText("Logout");
+        private readonly By _btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
+        private readonly By _txtUsername = By.Id("username");
+        private readonly By _txtPassword = By.Id("password");
+        private readonly By _btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
+        private readonly By _btnLogout = By.LinkText("Logout");
 
         public LoginPagePOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
-            this.driver = driver;
+            _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
         }
 
@@ -25,12 +25,12 @@ namespace FinalProject.POMClasses
         public void NavigateToLoginPage()
         {
             _specFlowOutputHelper.WriteLine("Navigate to login page");
-            driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
+            _driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
 
             // Dismiss a banner that can get in the way
             try
             {
-                driver.FindElement(btnDismissStoreNotice).Click();
+                _driver.FindElement(_btnDismissStoreNotice).Click();
             }
             catch (ElementNotInteractableException)
             {
@@ -43,27 +43,27 @@ namespace FinalProject.POMClasses
             NavigateToLoginPage();
 
             // Let us use the helper library.
-            MyHelpers help = new MyHelpers(driver, _specFlowOutputHelper);
+            MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
 
             _specFlowOutputHelper.WriteLine("Log in");
 
             _specFlowOutputHelper.WriteLine("Input username");
-            help.PutStringInInput(txtUsername, username);
+            help.PutStringInInput(_txtUsername, username);
 
             _specFlowOutputHelper.WriteLine("Input password");
-            help.PutStringInInput(txtPassword, password);
+            help.PutStringInInput(_txtPassword, password);
 
             _specFlowOutputHelper.WriteLine("Submit login details");
-            driver.FindElement(btnLogin).Click();
+            _driver.FindElement(_btnLogin).Click();
         }
 
         public void Logout()
         {
-            SiteWidePOM site = new SiteWidePOM(driver, _specFlowOutputHelper);
+            SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("My account");
 
             _specFlowOutputHelper.WriteLine("Logout");
-            driver.FindElement(btnLogout).Click();
+            _driver.FindElement(_btnLogout).Click();
         }
     }
 }

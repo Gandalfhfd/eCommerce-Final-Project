@@ -10,29 +10,29 @@ namespace FinalProject.Classes
 {
     internal class Customer
     {
-        public string firstName { get; }
-        public string lastName { get; }
-        public string streetAddress { get; }
-        public string townCity { get; }
-        public string postcode { get; }
-        public string phoneNumber { get; }
-        public string emailAddress { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string StreetAddress { get; }
+        public string TownCity { get; }
+        public string Postcode { get; }
+        public string PhoneNumber { get; }
+        public string EmailAddress { get; }
 
-        public string orderNumber { get; set; }
+        public string OrderNumber { get; set; }
 
         public Customer()
         {
             NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
 
-            this.firstName = nonDriverHelp.LoadParameterFromRunsettings("firstName");
-            this.lastName = nonDriverHelp.LoadParameterFromRunsettings("lastName");
-            this.streetAddress = nonDriverHelp.LoadParameterFromRunsettings("streetAddress");
-            this.townCity = nonDriverHelp.LoadParameterFromRunsettings("townCity");
-            this.postcode = nonDriverHelp.LoadParameterFromRunsettings("postcode");
-            this.phoneNumber = nonDriverHelp.LoadParameterFromRunsettings("phoneNumber");
-            this.emailAddress = nonDriverHelp.LoadParameterFromRunsettings("emailAddress");
-
-            this.orderNumber = "Order Number Not Set";
+            FirstName = NonDriverHelpers.LoadParameterFromRunsettings("firstName");
+            LastName = NonDriverHelpers.LoadParameterFromRunsettings("lastName");
+            StreetAddress = NonDriverHelpers.LoadParameterFromRunsettings("streetAddress");
+            TownCity = NonDriverHelpers.LoadParameterFromRunsettings("townCity");
+            Postcode = NonDriverHelpers.LoadParameterFromRunsettings("postcode");
+            PhoneNumber = NonDriverHelpers.LoadParameterFromRunsettings("phoneNumber");
+            EmailAddress = NonDriverHelpers.LoadParameterFromRunsettings("emailAddress");
+            
+            OrderNumber = "Order Number Not Set";
         }
     }
 }

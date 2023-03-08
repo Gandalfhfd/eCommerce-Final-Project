@@ -8,24 +8,23 @@ namespace FinalProject.Utils
 {
     internal class MyHelpers
     {
-        private IWebDriver driver;
+        private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
-        private readonly ScenarioContext _scenarioContext;
 
         public MyHelpers(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
         {
-            this.driver = driver;
+            _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
         }
         public void PutStringInInput(By locator, string text)
         {
-            IWebElement textField = driver.FindElement(locator);
+            IWebElement textField = _driver.FindElement(locator);
             textField.Click();
             textField.Clear();
             textField.SendKeys(text);
         }
 
-        public void PutStringInInput(IWebElement textField, string text)
+        public static void PutStringInInput(IWebElement textField, string text)
         // Overload
         {
             textField.Click();
@@ -35,7 +34,7 @@ namespace FinalProject.Utils
 
         public void WaitForElement(By locator, int timeToWaitInSeconds)
         {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeToWaitInSeconds));
             wait.Until(drv => drv.FindElement(locator));
         }
 
@@ -58,7 +57,7 @@ namespace FinalProject.Utils
                 try
                 {
                     // Refresh the element.
-                    element = driver.FindElement(locator);
+                    element = _driver.FindElement(locator);
 
                     // Check if element has gone stale.
                     // Exception will be thrown if it has, which will restart
@@ -80,7 +79,7 @@ namespace FinalProject.Utils
                         + stopWatch.ElapsedMilliseconds.ToString() + "ms");
                     stopWatch.Stop();
 
-                    return driver.FindElement(locator); ;
+                    return _driver.FindElement(locator); ;
                 }
                 catch (StaleElementReferenceException)
                 {
@@ -106,8 +105,7 @@ namespace FinalProject.Utils
             int scrollPosition1;
             int scrollPosition2;
 
-            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
-            int maxIter = nonDriverHelp.FindMaxIterations(timeToWaitInSeconds,
+            int maxIter = NonDriverHelpers.FindMaxIterations(timeToWaitInSeconds,
                 pollingTimeInMilliseconds);
 
             for (int i = 0; i < maxIter; i++)
@@ -127,7 +125,7 @@ namespace FinalProject.Utils
         public int GetCurrentScrollPosition()
         {
             // Find the scroll position.
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)_driver;
             object scrollPosition = executor
                 .ExecuteScript("return window.pageYOffset");
 
@@ -140,7 +138,7 @@ namespace FinalProject.Utils
         {
             try
             {
-                driver.FindElement(locator);
+                _driver.FindElement(locator);
                 return true;
             }
             catch (NoSuchElementException)
@@ -152,13 +150,12 @@ namespace FinalProject.Utils
 
         public void TakeScreenshot(string screenshotName)
         {
-            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
-            string screenshotDirectory = nonDriverHelp.LoadEnvironmentVariable("screenshotPath");
+            string screenshotDirectory = NonDriverHelpers.LoadEnvironmentVariable("screenshotPath");
 
             string screenshotPath = @screenshotDirectory + screenshotName +
-                nonDriverHelp.DateTimeNow() + ".png";
+                NonDriverHelpers.DateTimeNow() + ".png";
 
-            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
+            ITakesScreenshot? ssdriver = _driver as ITakesScreenshot;
             Screenshot screenshot = ssdriver.GetScreenshot();
 
             // Take screenshot.
