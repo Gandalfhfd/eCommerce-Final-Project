@@ -86,6 +86,7 @@ namespace FinalProject.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Apply a coupon to a product")]
         [NUnit.Framework.TestCaseAttribute("Belt", null)]
+        [NUnit.Framework.TestCaseAttribute("Polo", null)]
         public void ApplyACouponToAProduct(string product, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -121,6 +122,7 @@ this.FeatureBackground();
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Buy a product")]
         [NUnit.Framework.TestCaseAttribute("Belt", null)]
+        [NUnit.Framework.TestCaseAttribute("Cap", null)]
         public void BuyAProduct(string product, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

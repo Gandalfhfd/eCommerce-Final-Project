@@ -13,7 +13,7 @@ Scenario Outline: Apply a coupon to a product
 Examples:
 	| product |
 	| Belt    |
-	#| Polo    |
+	| Polo    |
 
 Scenario Outline: Buy a product
 	When I add '<product>' to my cart
@@ -23,4 +23,4 @@ Scenario Outline: Buy a product
 Examples:
 	| product |
 	| Belt    |
-	#| Polo    |
+	| Cap     |

@@ -27,7 +27,6 @@ namespace FinalProject.Utils
         [Before]
         public void SetUp()
         {
-            NonDriverHelpers nonDriverHelp = new NonDriverHelpers();
             _browser = NonDriverHelpers.LoadEnvironmentVariable("browser");
             _baseUrl = NonDriverHelpers.LoadEnvironmentVariable("baseUrl");
 
@@ -52,7 +51,6 @@ namespace FinalProject.Utils
             _scenarioContext["outputHelper"] = _specFlowOutputHelper;
 
             // Load in username and password from external file.
-            NonDriverHelpers nonDriverHelpers = new NonDriverHelpers();
             string username = NonDriverHelpers.LoadEnvironmentVariable("username");
             string password = NonDriverHelpers.LoadEnvironmentVariable("password");
 
