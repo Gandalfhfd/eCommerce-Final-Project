@@ -161,7 +161,7 @@ namespace FinalProject.Utils
             // Take screenshot.
             screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
 
-            // Save to specflow livingdoc
+            // Save to specflow livingdoc.
             _specFlowOutputHelper.AddAttachment(screenshotPath);
             TestContext.AddTestAttachment(screenshotPath, screenshotName);
         }

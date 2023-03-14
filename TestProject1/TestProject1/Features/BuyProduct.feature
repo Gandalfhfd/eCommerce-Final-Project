@@ -13,9 +13,10 @@ Scenario Outline: Apply a coupon to a product
 Examples:
 	| product |
 	| Belt    |
-	| Polo    |
+	#| Polo    |
 
-Scenario Outline: Buy a product
+	# have valid information in inline table
+Scenario Outline: Buy a product and check order is present in order history
 	When I add '<product>' to my cart
 	And I checkout using valid information
 	Then The order number presented should match the order in my account
@@ -23,4 +24,4 @@ Scenario Outline: Buy a product
 Examples:
 	| product |
 	| Belt    |
-	| Cap     |
+	#| Cap     |

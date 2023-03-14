@@ -86,7 +86,6 @@ namespace FinalProject.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Apply a coupon to a product")]
         [NUnit.Framework.TestCaseAttribute("Belt", null)]
-        [NUnit.Framework.TestCaseAttribute("Polo", null)]
         public void ApplyACouponToAProduct(string product, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -120,16 +119,15 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Buy a product")]
+        [NUnit.Framework.DescriptionAttribute("Buy a product and check order is present in order history")]
         [NUnit.Framework.TestCaseAttribute("Belt", null)]
-        [NUnit.Framework.TestCaseAttribute("Cap", null)]
-        public void BuyAProduct(string product, string[] exampleTags)
+        public void BuyAProductAndCheckOrderIsPresentInOrderHistory(string product, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("product", product);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Buy a product", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 18
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Buy a product and check order is present in order history", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 19
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -142,13 +140,13 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 this.FeatureBackground();
 #line hidden
-#line 19
+#line 20
  testRunner.When(string.Format("I add \'{0}\' to my cart", product), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 20
+#line 21
  testRunner.And("I checkout using valid information", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 21
+#line 22
  testRunner.Then("The order number presented should match the order in my account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -1,5 +1,6 @@
 ﻿using FinalProject.Utils;
 using OpenQA.Selenium;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace FinalProject.POMClasses
@@ -8,6 +9,7 @@ namespace FinalProject.POMClasses
     {
         private readonly IWebDriver _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        private readonly ScenarioContext _scenarioContext;
 
         private readonly By _btnDismissStoreNotice = By.CssSelector("a.woocommerce-store-notice__dismiss-link");
         private readonly By _txtUsername = By.Id("username");
@@ -15,17 +17,20 @@ namespace FinalProject.POMClasses
         private readonly By _btnLogin = By.CssSelector("button.woocommerce-form-login__submit");
         private readonly By _btnLogout = By.LinkText("Logout");
 
-        public LoginPagePOM(IWebDriver driver, ISpecFlowOutputHelper specFlowOutputHelper)
+        public LoginPagePOM(IWebDriver driver,
+            ISpecFlowOutputHelper specFlowOutputHelper,
+            ScenarioContext scenarioContext)
         {
             _driver = driver;
             _specFlowOutputHelper = specFlowOutputHelper;
+            _scenarioContext = scenarioContext;
         }
 
         // Edgewords Shop-specific setup
         public void NavigateToLoginPage()
         {
             _specFlowOutputHelper.WriteLine("Navigate to login page");
-            _driver.Url = "https://www.edgewordstraining.co.uk/demo-site/my-account";
+            _driver.Url = (string)_scenarioContext["baseUrl"] + "my-account/";
 
             // Dismiss a banner that can get in the way
             try

@@ -10,7 +10,7 @@ namespace FinalProject.Utils
     [Binding]
     internal class HooksClass
     {
-        public static IWebDriver? _driver;
+        private IWebDriver? _driver;
         private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         private readonly ScenarioContext _scenarioContext;
 
@@ -28,9 +28,15 @@ namespace FinalProject.Utils
         public void SetUp()
         {
             _browser = NonDriverHelpers.LoadEnvironmentVariable("browser");
+            
+            // Share the baseUrl via scenario context.
             _baseUrl = NonDriverHelpers.LoadEnvironmentVariable("baseUrl");
+            _scenarioContext["baseUrl"] = _baseUrl;
 
             _specFlowOutputHelper.WriteLine($"Read in browser var from runsettings: {_browser}");
+            // Share the specFlowOutputHelper via scenario context.
+            _scenarioContext["outputHelper"] = _specFlowOutputHelper;
+
             _browser = _browser.ToLower().Trim();
 
             switch (_browser)
@@ -45,21 +51,19 @@ namespace FinalProject.Utils
                     break;
             }
 
-            // Share the driver with anyone who wants it.
+            // Share the driver with anyone via scenario context.
             _scenarioContext["mydriver"] = _driver;
-            // Share the specFlowOutputHelper with anyone who wants it.
-            _scenarioContext["outputHelper"] = _specFlowOutputHelper;
 
             // Load in username and password from external file.
             string username = NonDriverHelpers.LoadEnvironmentVariable("username");
             string password = NonDriverHelpers.LoadEnvironmentVariable("password");
 
             // Log in so that we can view the cart.
-            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper, _scenarioContext);
             login.Login(username, password);
 
             // Prepare the test by removing all items from the cart
-            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper, _scenarioContext);
             cart.RemoveItemsFromCart();
 
             login.Logout();
@@ -72,7 +76,7 @@ namespace FinalProject.Utils
         {
             _specFlowOutputHelper.WriteLine("Test end");
 
-            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper, _scenarioContext);
             // Try catch ensures driver.Quit() is called.
             try
             {
@@ -83,7 +87,7 @@ namespace FinalProject.Utils
                 _specFlowOutputHelper.WriteLine("Could not remove items from cart");
             }
 
-            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper, _scenarioContext);
             // Try catch ensures driver.Quit() is called.
             try
             {

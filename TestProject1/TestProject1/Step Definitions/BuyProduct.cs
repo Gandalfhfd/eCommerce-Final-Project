@@ -1,6 +1,7 @@
 ﻿using FinalProject.POMClasses;
 using FinalProject.Utils;
 using OpenQA.Selenium;
+using System.Reflection;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -25,11 +26,16 @@ namespace FinalProject.Step_Definitions
         [Given(@"I am logged in")]
         public void GivenIHaveLoggedIn()
         {
+            //var path = Assembly.Location;
+            //_specFlowOutputHelper.WriteLine($"directory = {path}");
+            //string newPath = Path.GetFullPath(Path.Combine(path, @"..\..\"));
+            //_specFlowOutputHelper.WriteLine($"higher directory = {newPath}");
+
             // Load in username and password from external file.
             string username = NonDriverHelpers.LoadEnvironmentVariable("username");
             string password = NonDriverHelpers.LoadEnvironmentVariable("password");
 
-            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper);
+            LoginPagePOM login = new LoginPagePOM(_driver, _specFlowOutputHelper, _scenarioContext);
             login.Login(username, password);
 
             MyHelpers help = new MyHelpers(_driver, _specFlowOutputHelper);
@@ -57,7 +63,7 @@ namespace FinalProject.Step_Definitions
             SiteWidePOM site = new SiteWidePOM(_driver, _specFlowOutputHelper);
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper, _scenarioContext);
             _specFlowOutputHelper.WriteLine($"Coupon = {coupon}");
             cart.ApplyCoupon(coupon);
 
@@ -72,7 +78,7 @@ namespace FinalProject.Step_Definitions
             site.NavigateUsingNavLink("Cart");
 
             // Consider using site.NavigateUsingNavLink here instead.
-            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper, _scenarioContext);
             cart.GoToCheckout();
 
             CheckoutPOM checkout = new CheckoutPOM(_driver, _specFlowOutputHelper);
@@ -92,7 +98,7 @@ namespace FinalProject.Step_Definitions
 
             site.NavigateUsingNavLink("Cart");
 
-            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper);
+            CartPOM cart = new CartPOM(_driver, _specFlowOutputHelper, _scenarioContext);
 
             decimal discount = cart.GetCouponDiscount();
 
